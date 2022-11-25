@@ -10,4 +10,4 @@ Simon's two-stage design.
 Functions for evaluating and visualizing the operating characteristics of
 Simon's two-stage design.
 }
-\keyword{package}
+\keyword{internal}

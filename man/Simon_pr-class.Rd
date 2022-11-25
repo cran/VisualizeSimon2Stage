@@ -3,19 +3,21 @@
 \docType{class}
 \name{Simon_pr-class}
 \alias{Simon_pr-class}
-\title{S4 class \linkS4class{Simon_pr}}
+\title{S4 Class \linkS4class{Simon_pr}}
 \description{
-S4 class \linkS4class{Simon_pr}
+Probabilities of early termination, failure and success, of Simon's Two-Stage Design.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{.Data}}{\eqn{p\times 3} \link[base]{numeric} \link[base]{matrix}, probability of frail
+\item{\code{.Data}}{\eqn{l\times 3} \link[base]{numeric} \link[base]{matrix}, probability of frail
 (i.e., early termination), fail (to reject the null) and success (to reject the null), at each
-true response rate given in \code{@prob}}
+response rate \eqn{p} given in \code{@prob}}
 
-\item{\code{eN}}{\link[base]{numeric} vector of length \eqn{p}, expected sample size(s)}
+\item{\code{eN}}{\link[base]{numeric} \link[base]{vector} of length \eqn{l}, expected sample size(s) \eqn{\textrm{E}(N)}}
 
-\item{\code{prob}}{\link[base]{numeric} vector of length \eqn{p}, true response rate(s)}
+\item{\code{prob}}{\link[base]{numeric} \link[base]{vector} of length \eqn{l}, response rate(s) \eqn{p}}
+
+\item{\code{simon}}{\linkS4class{simon_design} object}
 }}
 

@@ -1,39 +1,18 @@
 
 
-#' @title Print \link[clinfun]{ph2simon} Object
-#' 
-#' @description Print \link[clinfun]{ph2simon} object, overwriting \code{clinfun:::print.ph2simon}
-#' 
-#' @param x \link[clinfun]{ph2simon} object
-#' 
-#' @param ... potential parameters, currently not in use
-#' 
-#' @return 
-#' \link{print.ph2simon} does not have a return value
-#' 
-#' @examples 
-#' library(clinfun)
-#' (x = ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
-#' class(x)
-#' autoplot(x, type = 'minimax')
-#' autoplot(x, type = 'optimal')
-#' autoplot(x, type = 'n1')
-#' autoplot(x, type = 'maximax')
-#' 
-#' @export
-print.ph2simon <- function(x, ...) {
-  out <- summary.ph2simon(x)
-  out$EN[] <- sprintf('%.1f', out$EN)
-  out$p[] <- sprintf('%.1f%%', 1e2*out$p) 
-  
-  cat('\n Simon\'s 2-Stage Design\n\n')
-  cat(sprintf('Unacceptable Response Rate: %.1f%%\n', 1e2*x[['pu']]))
-  cat(sprintf('Desirable Response Rate: %.1f%%\n', 1e2*x[['pa']]))
-  cat(sprintf('Controlled Error Rates: \u03B1 \u2264 %.f%%, \u03B2 \u2264 %.f%%\n', 1e2*x[['alpha']], 1e2*x[['beta']]))
-  cat(sprintf('Maximum Sample Size Allowed: %d\n\n', x$nmax))
-  print.default(cbind(out$design, out$EN, out$p), right = TRUE, quote = FALSE, ...)
-  cat('\n')
-}
+# very difficult to overwrite \code{clinfun:::print.ph2simon} when publish to CRAN ..
+# print.ph2simon <- function(x, ...) {
+#  out <- summary.ph2simon(x)
+#  out$EN[] <- sprintf('%.1f', out$EN)
+#  out$p[] <- sprintf('%.1f%%', 1e2*out$p) 
+#  cat('\n Simon\'s 2-Stage Design\n\n')
+#  cat(sprintf('Unacceptable Response Rate: %.1f%%\n', 1e2*x[['pu']]))
+#  cat(sprintf('Desirable Response Rate: %.1f%%\n', 1e2*x[['pa']]))
+#  cat(sprintf('Controlled Error Rates: \u03B1 \u2264 %.f%%, \u03B2 \u2264 %.f%%\n', 1e2*x[['alpha']], 1e2*x[['beta']]))
+#  cat(sprintf('Maximum Sample Size Allowed: %d\n\n', x$nmax))
+#  print.default(cbind(out$design, out$EN[, 1L, drop = FALSE]), right = TRUE, quote = FALSE, ...)
+#  cat('\n')
+#}
 
 
 
@@ -54,11 +33,14 @@ summary.ph2simon <- function(object, ...) {
   r <- ret_design[,'r']
   n <- ret_design[,'n']
   
-  sm <- mapply(FUN = function(n1, n, r1, r) {
+  sm <- .mapply(FUN = function(n1, n, r1, r) {
     Simon_pr(prob = c(object$pu, object$pa), n1 = n1, n = n, r1 = r1, r = r)
-  }, n1 = n1, n = n, r1 = r1, r = r, SIMPLIFY = FALSE)
+  }, dots = list(n1 = n1, n = n, r1 = r1, r = r), MoreArgs = NULL)
+  
   ret_EN <- do.call(rbind, args = lapply(sm, FUN = function(i) {
-    setNames(i@eN, nm = paste0('EN(', c('pu', 'pa'), ')'))
+    y <- i@eN
+    names(y) <- paste0('EN(', c('pu', 'pa'), ')')
+    return(y)
   }))
   ret_p <- do.call(rbind, args = lapply(sm, FUN = function(i) {
     i <- unclass(i)
@@ -106,14 +88,14 @@ autolayer.ph2simon <- function(
   
   sm <- Simon_pr(prob = c(pu, pa), n1 = n1, n = n, r1 = r1, r = r)
   dd <- sm@.Data
-  nm <- c(sprintf('Early Termination: %.1f%% vs. %.1f%%', 1e2*dd[1L,1L], 1e2*dd[2L,1L]),
-          sprintf('Fail: %.1f%% vs. %.1f%%', 1e2*dd[1L,2L], 1e2*dd[2L,2L]), 
-          sprintf('Success: \u03B1 = %.1f%%, 1-\u03B2 = %.1f%%', 1e2*dd[1L,3L], 1e2*dd[2L,3L]))
+  nm <- c(sprintf('Early Termination\n%.1f%% vs. %.1f%%\n', 1e2*dd[1L,1L], 1e2*dd[2L,1L]),
+          sprintf('Fail\n%.1f%% vs. %.1f%%\n', 1e2*dd[1L,2L], 1e2*dd[2L,2L]), 
+          sprintf('Success\n\u03B1 = %.1f%%, 1-\u03B2 = %.1f%%\n', 1e2*dd[1L,3L], 1e2*dd[2L,3L]))
   
   list(
     # ?ggplot2::geom_rect wont work here
-    geom_bar(mapping = aes(x = 2, y = dd[1L,], fill = nm), stat = 'identity', color = 'white'),
-    geom_bar(mapping = aes(x = 1, y = dd[2L,], fill = nm), stat = 'identity', color = 'white'),
+    geom_bar(mapping = aes(x = 2, y = dd[1L,], fill = nm), alpha = c(.3, .3, 1), stat = 'identity', color = 'white'),
+    geom_bar(mapping = aes(x = 1, y = dd[2L,], fill = nm), alpha = c(.3, .3, 1), stat = 'identity', color = 'white'),
     coord_polar(theta = 'y', direction = -1),
     xlim(.3, 2.5),
     scale_fill_discrete(name = sprintf(
@@ -122,6 +104,32 @@ autolayer.ph2simon <- function(
   )
 }
 
+
+#' @title Plot A Simon's Two-Stage Design
+#' 
+#' @description Plot \link[clinfun]{ph2simon} object.
+#' 
+#' @param object \link[clinfun]{ph2simon} object
+#' 
+#' @param ... potential parameters, currently not in use
+#' 
+#' @return 
+#' \link{autoplot.ph2simon} returns a \link[ggplot2]{ggplot} object
+#' 
+#' @examples
+#' library(clinfun)
+#' (x = ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
+#' class(x)
+#' autoplot(x, type = 'minimax')
+#' autoplot(x, type = 'optimal')
+#' autoplot(x, type = 'n1')
+#' autoplot(x, type = 'maximax')
+#' 
+#' # example from user feedback
+#' (des = ph2simon(pu = .05, pa = .3, ep1 = .05, ep2 = .2))
+#' autoplot(des, type = 'optimal')
+#' autoplot(des, type = 'minimax')
+#' 
 #' @export
 autoplot.ph2simon <- function(object, ...) {
   ggplot() + autolayer.ph2simon(object, ...) + theme_void()
