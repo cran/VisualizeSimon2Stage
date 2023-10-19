@@ -9,11 +9,10 @@
 #' Functions for evaluating and visualizing the operating characteristics of 
 #' Simon's two-stage design.
 #'
-#' @import ggplot2 methods
+#' @import methods
 #' 
 #' @docType package
 #' @keywords internal
 #' @name VisualizeSimon2Stage-package
 NULL
 
-# '_PACKAGE'

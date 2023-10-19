@@ -2,7 +2,7 @@
 % Please edit documentation in R/ph2simon_etc.R
 \name{autoplot.ph2simon}
 \alias{autoplot.ph2simon}
-\title{Plot A Simon's Two-Stage Design}
+\title{Plot Simon's Two-Stage Design}
 \usage{
 \method{autoplot}{ph2simon}(object, ...)
 }
@@ -12,10 +12,10 @@
 \item{...}{potential parameters, currently not in use}
 }
 \value{
-\link{autoplot.ph2simon} returns a \link[ggplot2]{ggplot} object
+Function \code{\link[=autoplot.ph2simon]{autoplot.ph2simon()}} returns a \link[ggplot2]{ggplot} object.
 }
 \description{
-Plot \link[clinfun]{ph2simon} object.
+Plot \link[clinfun]{ph2simon} object using \CRANpkg{ggplot2}.
 }
 \examples{
 library(clinfun)
@@ -26,7 +26,7 @@ autoplot(x, type = 'optimal')
 autoplot(x, type = 'n1')
 autoplot(x, type = 'maximax')
 
-# example from user feedback
+# example with r1 = 0
 (des = ph2simon(pu = .05, pa = .3, ep1 = .05, ep2 = .2))
 autoplot(des, type = 'optimal')
 autoplot(des, type = 'minimax')

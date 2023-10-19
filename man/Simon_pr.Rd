@@ -2,19 +2,19 @@
 % Please edit documentation in R/Simon_pr.R
 \name{Simon_pr}
 \alias{Simon_pr}
-\title{Probabilities of Simon's Two-Stage Design}
+\title{Probabilities associated with a Simon's Two-Stage Design}
 \usage{
 Simon_pr(prob, n1, n, r1, r)
 }
 \arguments{
 \item{prob}{\link[base]{numeric} \link[base]{vector}, true response rate(s) \eqn{p}}
 
-\item{n1, n}{\link[base]{integer} scalars, stage-1 sample size \eqn{n_1} and total sample size \eqn{n}}
+\item{n1, n}{positive \link[base]{integer} scalars, Stage-1 sample size \eqn{n_1} and total sample size \eqn{n}}
 
-\item{r1, r}{\link[base]{integer} scalars, number of positive response
-in stage-1 \eqn{r_1} and overall \eqn{r} required \strong{exclusive}.
-In other words, passing Stage 1 indicates observing \eqn{>r_1} positive responses,
-and rejecting \eqn{H_0} indicates observing \eqn{>r} positive responses.}
+\item{r1, r}{non-negative \link[base]{integer} scalars, number of response
+in Stage-1 \eqn{r_1} and overall \eqn{r} required \emph{exclusively}.
+In other words, passing Stage-1 indicates observing \eqn{>r_1} responses,
+and rejecting \eqn{H_0} indicates observing \eqn{>r} responses.}
 }
 \value{
 \link{Simon_pr} returns \linkS4class{Simon_pr} object.
@@ -25,7 +25,7 @@ Probability of frail
 of a Simon's two-stage design, at given true response rate(s).
 }
 \details{
-Given the Simon's two-stage design with \eqn{n_1}, \eqn{r_1}, \eqn{n} and \eqn{r}, for a response rate
+Given the Simon's two-stage design \eqn{(n_1, r_1, n, r)}, for a response rate
 \eqn{p}, we have the number of Stage-1 positive responses \eqn{X_1 \sim \textrm{Binom}(n_1, p)}
 and the number of Stage-2 positive responses \eqn{X_2 \sim \textrm{Binom}(n-n_1, p)}.
 Obviously \eqn{X_1} and \eqn{X_2} are independent.
@@ -35,7 +35,7 @@ The probability of early termination is \eqn{\textrm{Pr}(X_1 \leq r_1)}.
 The probability of failure to reject \eqn{H_0} is
 \deqn{\sum_{s_1 = r_1+1}^{n_1} \textrm{Pr}(X_1=s_1)\cdot\textrm{Pr}(X_2 \leq (r-s_1))}
 
-The probability of rejection of \eqn{H_0} is
+The probability of rejecting \eqn{H_0} is
 \deqn{\sum_{s_1 = r_1+1}^{n_1} \textrm{Pr}(X_1=s_1)\cdot\textrm{Pr}(X_2 > (r-s_1))}
 
 Parameters nomenclature of \code{n1}, \code{n}, \code{r1} and \code{r} follows that of
@@ -47,4 +47,6 @@ Simon_pr(prob = c(.2, .4), n1 = 15L, r1 = 3L, n = 24L, r = 7L)
 }
 \references{
 \doi{10.1016/0197-2456(89)90015-9}
+
+\url{https://www.ncss.com/software/pass/}
 }

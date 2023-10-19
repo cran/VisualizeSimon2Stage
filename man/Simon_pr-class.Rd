@@ -12,12 +12,10 @@ Probabilities of early termination, failure and success, of Simon's Two-Stage De
 \describe{
 \item{\code{.Data}}{\eqn{l\times 3} \link[base]{numeric} \link[base]{matrix}, probability of frail
 (i.e., early termination), fail (to reject the null) and success (to reject the null), at each
-response rate \eqn{p} given in \code{@prob}}
+response rate \eqn{p} given in \verb{@prob}}
 
 \item{\code{eN}}{\link[base]{numeric} \link[base]{vector} of length \eqn{l}, expected sample size(s) \eqn{\textrm{E}(N)}}
 
 \item{\code{prob}}{\link[base]{numeric} \link[base]{vector} of length \eqn{l}, response rate(s) \eqn{p}}
-
-\item{\code{simon}}{\linkS4class{simon_design} object}
 }}
 
