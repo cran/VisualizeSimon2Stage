@@ -2,10 +2,12 @@
 
 
 
-#' @title S4 Class \linkS4class{Simon_pr}
+#' @title \linkS4class{Simon_pr}: Probabilities of a Simon's Two-Stage Design
 #' 
 #' @description 
-#' Probabilities of early termination, failure and success, of Simon's Two-Stage Design.
+#' Probability of frail 
+#' (i.e., early termination), fail (to reject the null) and success (to reject the null) 
+#' of a Simon's two-stage design, at given true response rate(s).
 #' 
 #' @slot .Data \eqn{l\times 3} \link[base]{numeric} \link[base]{matrix}, probability of frail 
 #' (i.e., early termination), fail (to reject the null) and success (to reject the null), at each
@@ -15,6 +17,9 @@
 #' 
 #' @slot prob \link[base]{numeric} \link[base]{vector} of length \eqn{l}, response rate(s) \eqn{p}
 #' 
+#' @name Simon_pr
+#' @importFrom methods setClass
+#' @aliases Simon_pr-class
 #' @export
 setClass(Class = 'Simon_pr', contains = 'matrix', slots = c(
   eN = 'numeric', 
@@ -27,12 +32,7 @@ setClass(Class = 'Simon_pr', contains = 'matrix', slots = c(
 
 
 
-#' @title Probabilities associated with a Simon's Two-Stage Design
-#' 
-#' @description 
-#' Probability of frail 
-#' (i.e., early termination), fail (to reject the null) and success (to reject the null) 
-#' of a Simon's two-stage design, at given true response rate(s).
+#' @rdname Simon_pr
 #' 
 #' @param n1,n positive \link[base]{integer} scalars, Stage-1 sample size \eqn{n_1} and total sample size \eqn{n}
 #' 
@@ -73,6 +73,7 @@ setClass(Class = 'Simon_pr', contains = 'matrix', slots = c(
 #' @examples 
 #' Simon_pr(prob = c(.2, .4), n1 = 15L, r1 = 3L, n = 24L, r = 7L)
 #' 
+#' @importFrom methods new
 #' @importFrom stats dbinom pbinom
 #' @export
 Simon_pr <- function(prob, n1, n, r1, r) {
@@ -109,7 +110,7 @@ Simon_pr <- function(prob, n1, n, r1, r) {
   
   colnames(ret) <- c('P(ET)', 'P(Fail)', 'P(Success)')
   
-  new('Simon_pr', ret, 
+  new(Class = 'Simon_pr', ret, 
       eN = ret[,1L] * n1 + (1 - ret[,1L]) * n, 
       prob = prob)
 }
@@ -130,6 +131,7 @@ Simon_pr <- function(prob, n1, n, r1, r) {
 #' The \link[methods]{show} method for \linkS4class{Simon_pr} object 
 #' does not have a returned value.
 #' 
+#' @importFrom methods setMethod show signature
 #' @export
 setMethod(f = show, signature = signature(object = 'Simon_pr'), definition = function(object) {
   .data <- object@.Data
@@ -147,6 +149,7 @@ setMethod(f = show, signature = signature(object = 'Simon_pr'), definition = fun
 
 
 
+#' @importFrom methods new
 #' @export
 `[.Simon_pr` <- function(x, i) {
   x@.Data <- `[`(unclass(x), i, j = TRUE, drop = FALSE)

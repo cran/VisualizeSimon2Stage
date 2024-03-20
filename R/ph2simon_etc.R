@@ -52,7 +52,7 @@ print_ph2simon <- function(x, ...) {
 #' @param ... potential parameters, currently not in use
 #' 
 #' @returns
-#' [summary.ph2simon] returns a \link[base]{list} with three (3) elements
+#' Function [summary.ph2simon] returns a \link[base]{list} with three (3) elements
 #' \describe{
 #' \item{`'design'`}{\link[base]{integer} \link[base]{matrix}}
 #' \item{`'EN'`}{\link[base]{double} \link[base]{matrix}}
@@ -65,6 +65,7 @@ print_ph2simon <- function(x, ...) {
 #' summary(x)
 #' 
 #' @include Simon_pr.R
+#' @importFrom methods slot
 #' @export summary.ph2simon
 #' @export
 summary.ph2simon <- function(object, ...) {
@@ -107,7 +108,8 @@ summary.ph2simon <- function(object, ...) {
 
 
 
-#' @importFrom ggplot2 autolayer aes geom_bar coord_polar xlim labs
+#' @importFrom ggplot2 autolayer aes geom_bar coord_polar xlim labs theme guides guide_legend
+#' @importFrom grid unit
 #' @export
 autolayer.ph2simon <- function(
     object, # return from ?clinfun::ph2simon
@@ -131,16 +133,22 @@ autolayer.ph2simon <- function(
   
   sm <- Simon_pr(prob = c(pu, pa), n1 = n1, n = n, r1 = r1, r = r)
   dd <- sm@.Data
-  nm <- c(sprintf('Early Termination\n%.1f%% vs. %.1f%%\n', 1e2*dd[1L,1L], 1e2*dd[2L,1L]),
-          sprintf('Fail\n%.1f%% vs. %.1f%%\n', 1e2*dd[1L,2L], 1e2*dd[2L,2L]), 
-          #sprintf('Success\n\u03b1 = %.1f%%, 1-\u03b2 = %.1f%%\n', 1e2*dd[1L,3L], 1e2*dd[2L,3L]))
-          sprintf('Success\nalpha = %.1f%%, power = %.1f%%\n', 1e2*dd[1L,3L], 1e2*dd[2L,3L]))
+  nm <- c(sprintf('Early Termination\n%.1f%% vs. %.1f%%', 1e2*dd[1L,1L], 1e2*dd[2L,1L]),
+          sprintf('Fail\n%.1f%% vs. %.1f%%', 1e2*dd[1L,2L], 1e2*dd[2L,2L]), 
+          #sprintf('Success\n\u03b1 = %.1f%%, 1-\u03b2 = %.1f%%', 1e2*dd[1L,3L], 1e2*dd[2L,3L]))
+          sprintf('Success\nalpha = %.1f%%, power = %.1f%%', 1e2*dd[1L,3L], 1e2*dd[2L,3L]))
   
   list(
     # ?ggplot2::geom_rect wont work here
     geom_bar(mapping = aes(x = 2, y = dd[1L,], fill = nm), alpha = c(.3, .3, 1), stat = 'identity', color = 'white'),
     geom_bar(mapping = aes(x = 1, y = dd[2L,], fill = nm), alpha = c(.3, .3, 1), stat = 'identity', color = 'white'),
     coord_polar(theta = 'y', direction = -1),
+    theme(
+      legend.spacing.y = unit(.01, units = 'npc')
+    ),
+    guides(
+      fill = guide_legend(byrow = TRUE)
+    ), 
     xlim(.3, 2.5),
     labs(fill = sprintf(
       fmt = 'Simon\'s 2-Stage Design\n%s\nResponse Rates: pu=%d%% vs. pa=%d%%\nExpected Total #: %.1f vs. %.1f', 
@@ -216,7 +224,7 @@ autoplot.ph2simon <- function(object, ...) {
 #' @param ... additional parameters, currently not in use
 #' 
 #' @returns 
-#' [Sprintf.ph2simon] returns a \link[base]{noquote} \link[base]{character} scalar.
+#' Function [Sprintf.ph2simon()] returns a \link[base]{noquote} \link[base]{character} scalar.
 #' 
 #' @examples 
 #' library(clinfun)

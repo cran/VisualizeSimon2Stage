@@ -1,6 +1,6 @@
 
 
-#' @title S4 Class \linkS4class{Simon_oc}
+#' @title \linkS4class{Simon_oc}: Operating Characteristics of Simon's Two-Stage Design
 #' 
 #' @description
 #' Operating characteristics of Simon's two-stage design.
@@ -15,6 +15,9 @@
 #' the frequencies of each regime having maximum response and success in Simon's two-stage trial.
 #' 
 #' @include Simon_pr.R
+#' @name Simon_oc
+#' @importFrom methods setClass
+#' @aliases Simon_oc-class
 #' @export
 setClass(Class = 'Simon_oc', contains = 'Simon_pr', slots = c(
   maxResp = 'integer',
@@ -28,10 +31,7 @@ setClass(Class = 'Simon_oc', contains = 'Simon_pr', slots = c(
 
 
 
-#' @title Operating Characteristics of Simon's Two-Stage Design
-#' 
-#' @description
-#' Operating characteristics of Simon's two-stage design.
+#' @rdname Simon_oc
 #' 
 #' @param prob *named* \link[base]{numeric} \link[base]{vector}, 
 #' true response rate(s) of (multiple) drug(s).
@@ -63,7 +63,7 @@ setClass(Class = 'Simon_oc', contains = 'Simon_pr', slots = c(
 #' 
 #' @returns 
 #' 
-#' [Simon_oc] returns \linkS4class{Simon_oc} object
+#' Function [Simon_oc()] returns \linkS4class{Simon_oc} object
 #' 
 #' @references 
 #' \doi{10.1016/0197-2456(89)90015-9}
@@ -74,6 +74,7 @@ setClass(Class = 'Simon_oc', contains = 'Simon_pr', slots = c(
 #' Simon_oc(prob = c(A = .3, B = .2, C = .15), simon = x, type = 'minimax', R = 1e3L)
 #' Simon_oc(prob = c(A = .3, B = .2, C = .15), simon = x, type = 'optimal', R = 1e3L)
 #' 
+#' @importFrom methods new
 #' @export
 Simon_oc <- function(
     prob, 
@@ -129,6 +130,7 @@ Simon_oc <- function(
 #' The \link[methods]{show} method for \linkS4class{Simon_oc} object 
 #' does not have a returned value.
 #' 
+#' @importFrom methods setMethod show signature
 #' @export
 setMethod(f = show, signature = signature(object = 'Simon_oc'), definition = function(object) {
   cat(Sprintf.Simon_oc(object))
@@ -142,7 +144,8 @@ setMethod(f = show, signature = signature(object = 'Simon_oc'), definition = fun
 
 
 
-#' @importFrom ggplot2 autolayer aes geom_rect coord_polar labs
+#' @importFrom ggplot2 autolayer aes geom_rect coord_polar labs theme guides guide_legend
+#' @importFrom grid unit
 #' @export
 autolayer.Simon_oc <- function(object, ...) {
   pn <- length(prob <- object@prob)
@@ -152,13 +155,20 @@ autolayer.Simon_oc <- function(object, ...) {
   ymax <- cumsum(maxResp)
   ymin <- c(0, ymax[-pn])
   nm <- sprintf(
-    fmt = '%s; p = %.f%%\nHaving Max # of Responses: %.1f%%\nHaving Max # of Responses & Simon\'s Success: %.1f%%\nExpected Sample Size: %.1f\n', 
+    fmt = '%s; p = %.f%%\nHaving Max # of Responses: %.1f%%\nHaving Max # of Responses & Simon\'s Success: %.1f%%\nExpected Sample Size: %.1f', 
     names(prob), 1e2*prob, 1e2*maxResp/R, 1e2*Simon_maxResp/R, object@eN)
   
   list(
     geom_rect(mapping = aes(ymax = ymax, ymin = ymin, xmax = 1, xmin = 0, fill = nm), alpha = .3, stat = 'identity', colour = 'white'),
     geom_rect(mapping = aes(ymax = ymin + Simon_maxResp, ymin = ymin, xmax = 1, xmin = 0, fill = nm), stat = 'identity', colour = 'white'),
+    theme(
+      legend.key.spacing.y = unit(100, units = 'npc') #?? why not seeing the space??
+    ),
+    #guides(
+    #  fill = guide_legend(byrow = TRUE)
+    #),
     coord_polar(theta = 'y'),
+    #coord_radial(theta = 'y'), # dont' understand what this is!!!
     labs(fill = sprintf('Regimen\n(%d Simulated Trials)', R))
   )
 }

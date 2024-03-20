@@ -9,10 +9,11 @@
 #' Functions for evaluating and visualizing the operating characteristics of 
 #' Simon's two-stage design.
 #'
-#' @import methods
-#' 
-#' @docType package
+#' @author Tingting Zhan
+#'
 #' @keywords internal
-#' @name VisualizeSimon2Stage-package
-NULL
+'_PACKAGE'
+
+# @name VisualizeSimon2Stage-package
+#NULL
 

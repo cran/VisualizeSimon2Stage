@@ -20,7 +20,7 @@ Sprintf.ph2simon(model, type = c("minimax", "optimal", "n1", "maximax"), ...)
 \item{...}{additional parameters, currently not in use}
 }
 \value{
-\link{Sprintf.ph2simon} returns a \link[base]{noquote} \link[base]{character} scalar.
+Function \code{\link[=Sprintf.ph2simon]{Sprintf.ph2simon()}} returns a \link[base]{noquote} \link[base]{character} scalar.
 }
 \description{
 To create a short paragraph to describe a \link[clinfun]{ph2simon} object.

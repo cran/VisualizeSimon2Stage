@@ -12,7 +12,7 @@
 \item{...}{potential parameters, currently not in use}
 }
 \value{
-\link{summary.ph2simon} returns a \link[base]{list} with three (3) elements
+Function \link{summary.ph2simon} returns a \link[base]{list} with three (3) elements
 \describe{
 \item{\code{'design'}}{\link[base]{integer} \link[base]{matrix}}
 \item{\code{'EN'}}{\link[base]{double} \link[base]{matrix}}
