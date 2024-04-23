@@ -9,11 +9,10 @@
 #' Functions for evaluating and visualizing the operating characteristics of 
 #' Simon's two-stage design.
 #'
-#' @author Tingting Zhan
-#'
-#' @keywords internal
+#' @references 
+#' \doi{10.1016/0197-2456(89)90015-9}
+#' 
+#' \url{https://www.ncss.com/software/pass/}
+#' 
 '_PACKAGE'
-
-# @name VisualizeSimon2Stage-package
-#NULL
 

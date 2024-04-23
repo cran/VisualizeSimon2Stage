@@ -19,8 +19,8 @@ Simon_oc(
 )
 }
 \arguments{
-\item{prob}{\emph{named} \link[base]{numeric} \link[base]{vector},
-true response rate(s) of (multiple) drug(s).
+\item{prob}{\emph{named} \link[base]{double} \link[base]{vector},
+true response rate(s) \eqn{p} of (multiple) drug(s).
 The \code{names(prob)} should be the respective keyword(s) for the drug(s).}
 
 \item{simon}{\link[clinfun]{ph2simon} object}
@@ -31,22 +31,22 @@ Currently supports
 \code{'optimal'} for minimum expected total sample size \emph{under \eqn{p_0}},
 \code{'n1'} for minimum Stage-1 sample size \eqn{n_1},
 \code{'maximax'} to use up the user-provided maximum total sample size
-(parameter \code{nmax} of \link[clinfun]{ph2simon})}
+(parameter \code{nmax} of function \link[clinfun]{ph2simon})}
 
 \item{R}{\link[base]{integer} scalar, number of simulations.  Default \code{1e4L}.}
 
 \item{n1, n}{(optional) \link[base]{integer} scalars, Stage-1 sample size \eqn{n_1}
-and total sample size \eqn{n}.  Will be overridden if \code{simon} is given}
+and total sample size \eqn{n}.  Overridden if \code{simon} is given}
 
 \item{r1, r}{(optional) \link[base]{integer} scalars, number of response
-in Stage-1 \eqn{r_1} and overall \eqn{r} required \emph{exclusively}.
-In other words, passing Stage-1 means observing \eqn{>r_1} response.
-Will be overridden if \code{simon} is given}
+in Stage-1 \eqn{r_1} and overall \eqn{r} required \emph{exclusively},
+i.e., passing Stage-1 means observing \eqn{>r_1} response.
+Overridden if \code{simon} is given}
 
 \item{...}{potential parameters, currently not in use}
 }
 \value{
-Function \code{\link[=Simon_oc]{Simon_oc()}} returns \linkS4class{Simon_oc} object
+Function \link{Simon_oc} returns \linkS4class{Simon_oc} object
 }
 \description{
 Operating characteristics of Simon's two-stage design.
@@ -57,13 +57,11 @@ Operating characteristics of Simon's two-stage design.
 \section{Slots}{
 
 \describe{
-\item{\code{.Data}}{\linkS4class{Simon_pr} object}
-
-\item{\code{maxResp}}{\link[base]{integer} \link[base]{vector} of length \eqn{p},
+\item{\code{maxResp}}{\link[base]{integer} \link[base]{vector} of same length as \eqn{p},
 the frequencies of each regime having maximum response.
 The summation of \code{maxResp} is the number of simulation copies.}
 
-\item{\code{Simon_maxResp}}{\link[base]{integer} \link[base]{vector} of length \eqn{p},
+\item{\code{Simon_maxResp}}{\link[base]{integer} \link[base]{vector} of same length as \eqn{p},
 the frequencies of each regime having maximum response and success in Simon's two-stage trial.}
 }}
 
@@ -73,7 +71,4 @@ library(clinfun)
 Simon_oc(prob = c(A = .3, B = .2, C = .15), simon = x, type = 'minimax', R = 1e3L)
 Simon_oc(prob = c(A = .3, B = .2, C = .15), simon = x, type = 'optimal', R = 1e3L)
 
-}
-\references{
-\doi{10.1016/0197-2456(89)90015-9}
 }

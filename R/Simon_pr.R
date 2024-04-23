@@ -9,13 +9,13 @@
 #' (i.e., early termination), fail (to reject the null) and success (to reject the null) 
 #' of a Simon's two-stage design, at given true response rate(s).
 #' 
-#' @slot .Data \eqn{l\times 3} \link[base]{numeric} \link[base]{matrix}, probability of frail 
+#' @slot .Data \link[base]{ncol}-3 \link[base]{double} \link[base]{matrix}, probability of frail 
 #' (i.e., early termination), fail (to reject the null) and success (to reject the null), at each
 #' response rate \eqn{p} given in `@@prob`
 #' 
-#' @slot eN \link[base]{numeric} \link[base]{vector} of length \eqn{l}, expected sample size(s) \eqn{\textrm{E}(N)}
+#' @slot eN \link[base]{numeric} \link[base]{vector}, expected sample size(s) \eqn{\textrm{E}(N)} for each of response rate(s) \eqn{p}
 #' 
-#' @slot prob \link[base]{numeric} \link[base]{vector} of length \eqn{l}, response rate(s) \eqn{p}
+#' @slot prob \link[base]{double} \link[base]{vector}, response rate(s) \eqn{p}
 #' 
 #' @name Simon_pr
 #' @importFrom methods setClass
@@ -37,11 +37,11 @@ setClass(Class = 'Simon_pr', contains = 'matrix', slots = c(
 #' @param n1,n positive \link[base]{integer} scalars, Stage-1 sample size \eqn{n_1} and total sample size \eqn{n}
 #' 
 #' @param r1,r non-negative \link[base]{integer} scalars, number of response
-#' in Stage-1 \eqn{r_1} and overall \eqn{r} required *exclusively*.
-#' In other words, passing Stage-1 indicates observing \eqn{>r_1} responses,
+#' in Stage-1 \eqn{r_1} and overall \eqn{r} required *exclusively*,
+#' i.e., passing Stage-1 indicates observing \eqn{>r_1} responses,
 #' and rejecting \eqn{H_0} indicates observing \eqn{>r} responses.
 #' 
-#' @param prob \link[base]{numeric} \link[base]{vector}, true response rate(s) \eqn{p}
+#' @param prob \link[base]{double} \link[base]{vector}, true response rate(s) \eqn{p}
 #' 
 #' @details
 #' 
@@ -59,16 +59,11 @@ setClass(Class = 'Simon_pr', contains = 'matrix', slots = c(
 #' \deqn{\sum_{s_1 = r_1+1}^{n_1} \textrm{Pr}(X_1=s_1)\cdot\textrm{Pr}(X_2 > (r-s_1))}
 #' 
 #' Parameters nomenclature of `n1`, `n`, `r1` and `r` follows that of 
-#' PASS and \link[clinfun]{ph2simon}.
+#' PASS and function \link[clinfun]{ph2simon}.
 #' 
 #' @returns 
 #' 
 #' [Simon_pr] returns \linkS4class{Simon_pr} object.
-#' 
-#' @references 
-#' \doi{10.1016/0197-2456(89)90015-9}
-#' 
-#' \url{https://www.ncss.com/software/pass/}
 #' 
 #' @examples 
 #' Simon_pr(prob = c(.2, .4), n1 = 15L, r1 = 3L, n = 24L, r = 7L)
@@ -132,6 +127,7 @@ Simon_pr <- function(prob, n1, n, r1, r) {
 #' does not have a returned value.
 #' 
 #' @importFrom methods setMethod show signature
+#' @keywords internal
 #' @export
 setMethod(f = show, signature = signature(object = 'Simon_pr'), definition = function(object) {
   .data <- object@.Data
@@ -188,58 +184,6 @@ autoplot.Simon_pr <- function(object, ...) {
 
 
 
-
-
-
-
-#' @title Random Generator based on Simon's Two-Stage Design
-#' 
-#' @description
-#' Random generator based on Simon's two-stage design.
-#' 
-#' @param R positive \link[base]{integer} scalar, number of trials \eqn{R}
-#' 
-#' @param n1,n positive \link[base]{integer} scalars, Stage-1 sample size \eqn{n_1} and total sample size \eqn{n}
-#' 
-#' @param r1 non-negative \link[base]{integer} scalar, number of response
-#' in Stage-1 \eqn{r_1} required *exclusively*.
-#' In other words, passing Stage-1 indicates observing \eqn{>r_1} responses
-#' 
-#' @param prob \link[base]{numeric} scalar, true response rate \eqn{p}
-#' 
-#' @details
-#' Function [r_simon()] generates \eqn{R} copies of the number of responses \eqn{y} in the Simon's two-stage design.
-#' The conclusion of the trials are, 
-#' \describe{
-#' \item{\eqn{y \leq r_1}}{indicates early termination}
-#' \item{\eqn{r_1 < y \leq r}}{indicates failure to reject \eqn{H_0}}
-#' \item{\eqn{y > r}}{indicates success to reject \eqn{H_0}}
-#' }
-#' 
-#' Here \eqn{r} is not needed to *generate* the random number of responses \eqn{y}.
-#' Instead, \eqn{r} is needed to *determine* if the trial is a failure or a success. 
-#' Therefore, \eqn{r} is not a parameter in [r_simon].
-#' 
-#' @returns
-#' Function [r_simon()] returns an \link[base]{integer} \link[base]{vector} of length \eqn{R},
-#' which are the \eqn{R} copies of the number of responses in the Simon's two-stage design.
-#' 
-#' @examples
-#' library(clinfun)
-#' ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1) # using 'Optimal'
-#' # set.seed if needed 
-#' (ys = r_simon(R = 10L, n1 = 19L, n = 54L, r1 = 4L, prob = .3))
-#' cut.default(ys, breaks = c(0, 4L, 15L, 54L), right = TRUE,
-#'   labels = c('early-termination', 'fail', 'success'))
-#' 
-#' @importFrom stats rbinom
-#' @export
-r_simon <- function(R, n1, n, r1, prob) {
-  ret <- rbinom(n = R, size = n1, prob = prob) # number of positive responses in stage1  
-  id2 <- (ret > r1) # indices of trials going to stage2
-  ret[id2] <- ret[id2] + rbinom(n = sum(id2), size = n - n1, prob = prob) # number of positive responses in stage2
-  return(ret)
-}
 
 
 

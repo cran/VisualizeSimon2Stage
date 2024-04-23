@@ -17,3 +17,4 @@ Sprintf.Simon_oc(model, ...)
 \description{
 To create a short paragraph to describe a \linkS4class{Simon_oc} object.
 }
+\keyword{internal}

@@ -12,7 +12,7 @@ print_ph2simon(x, ...)
 \item{...}{additional parameters, currently not in use}
 }
 \value{
-Function \code{\link[=print_ph2simon]{print_ph2simon()}} does not have a returned value.
+Function \link{print_ph2simon} does not have a returned value.
 }
 \description{
 An alternate \link[base]{print} method for \link[clinfun]{ph2simon} object.

@@ -9,13 +9,13 @@
 Simon_pr(prob, n1, n, r1, r)
 }
 \arguments{
-\item{prob}{\link[base]{numeric} \link[base]{vector}, true response rate(s) \eqn{p}}
+\item{prob}{\link[base]{double} \link[base]{vector}, true response rate(s) \eqn{p}}
 
 \item{n1, n}{positive \link[base]{integer} scalars, Stage-1 sample size \eqn{n_1} and total sample size \eqn{n}}
 
 \item{r1, r}{non-negative \link[base]{integer} scalars, number of response
-in Stage-1 \eqn{r_1} and overall \eqn{r} required \emph{exclusively}.
-In other words, passing Stage-1 indicates observing \eqn{>r_1} responses,
+in Stage-1 \eqn{r_1} and overall \eqn{r} required \emph{exclusively},
+i.e., passing Stage-1 indicates observing \eqn{>r_1} responses,
 and rejecting \eqn{H_0} indicates observing \eqn{>r} responses.}
 }
 \value{
@@ -41,26 +41,21 @@ The probability of rejecting \eqn{H_0} is
 \deqn{\sum_{s_1 = r_1+1}^{n_1} \textrm{Pr}(X_1=s_1)\cdot\textrm{Pr}(X_2 > (r-s_1))}
 
 Parameters nomenclature of \code{n1}, \code{n}, \code{r1} and \code{r} follows that of
-PASS and \link[clinfun]{ph2simon}.
+PASS and function \link[clinfun]{ph2simon}.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{.Data}}{\eqn{l\times 3} \link[base]{numeric} \link[base]{matrix}, probability of frail
+\item{\code{.Data}}{\link[base]{ncol}-3 \link[base]{double} \link[base]{matrix}, probability of frail
 (i.e., early termination), fail (to reject the null) and success (to reject the null), at each
 response rate \eqn{p} given in \verb{@prob}}
 
-\item{\code{eN}}{\link[base]{numeric} \link[base]{vector} of length \eqn{l}, expected sample size(s) \eqn{\textrm{E}(N)}}
+\item{\code{eN}}{\link[base]{numeric} \link[base]{vector}, expected sample size(s) \eqn{\textrm{E}(N)} for each of response rate(s) \eqn{p}}
 
-\item{\code{prob}}{\link[base]{numeric} \link[base]{vector} of length \eqn{l}, response rate(s) \eqn{p}}
+\item{\code{prob}}{\link[base]{double} \link[base]{vector}, response rate(s) \eqn{p}}
 }}
 
 \examples{
 Simon_pr(prob = c(.2, .4), n1 = 15L, r1 = 3L, n = 24L, r = 7L)
 
-}
-\references{
-\doi{10.1016/0197-2456(89)90015-9}
-
-\url{https://www.ncss.com/software/pass/}
 }

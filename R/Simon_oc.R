@@ -5,13 +5,13 @@
 #' @description
 #' Operating characteristics of Simon's two-stage design.
 #' 
-#' @slot .Data \linkS4class{Simon_pr} object
+# @slot .Data \linkS4class{Simon_pr} object
 #' 
-#' @slot maxResp \link[base]{integer} \link[base]{vector} of length \eqn{p}, 
+#' @slot maxResp \link[base]{integer} \link[base]{vector} of same length as \eqn{p}, 
 #' the frequencies of each regime having maximum response.  
 #' The summation of `maxResp` is the number of simulation copies.
 #' 
-#' @slot Simon_maxResp \link[base]{integer} \link[base]{vector} of length \eqn{p}, 
+#' @slot Simon_maxResp \link[base]{integer} \link[base]{vector} of same length as \eqn{p}, 
 #' the frequencies of each regime having maximum response and success in Simon's two-stage trial.
 #' 
 #' @include Simon_pr.R
@@ -33,8 +33,8 @@ setClass(Class = 'Simon_oc', contains = 'Simon_pr', slots = c(
 
 #' @rdname Simon_oc
 #' 
-#' @param prob *named* \link[base]{numeric} \link[base]{vector}, 
-#' true response rate(s) of (multiple) drug(s).
+#' @param prob *named* \link[base]{double} \link[base]{vector}, 
+#' true response rate(s) \eqn{p} of (multiple) drug(s).
 #' The `names(prob)` should be the respective keyword(s) for the drug(s).
 #' 
 #' @param simon \link[clinfun]{ph2simon} object
@@ -45,15 +45,15 @@ setClass(Class = 'Simon_oc', contains = 'Simon_pr', slots = c(
 #' `'optimal'` for minimum expected total sample size *under \eqn{p_0}*,
 #' `'n1'` for minimum Stage-1 sample size \eqn{n_1},
 #' `'maximax'` to use up the user-provided maximum total sample size 
-#' (parameter `nmax` of \link[clinfun]{ph2simon})
+#' (parameter `nmax` of function \link[clinfun]{ph2simon})
 #' 
 #' @param n1,n (optional) \link[base]{integer} scalars, Stage-1 sample size \eqn{n_1} 
-#' and total sample size \eqn{n}.  Will be overridden if `simon` is given
+#' and total sample size \eqn{n}.  Overridden if `simon` is given
 #' 
 #' @param r1,r (optional) \link[base]{integer} scalars, number of response
-#' in Stage-1 \eqn{r_1} and overall \eqn{r} required *exclusively*.
-#' In other words, passing Stage-1 means observing \eqn{>r_1} response.
-#' Will be overridden if `simon` is given
+#' in Stage-1 \eqn{r_1} and overall \eqn{r} required *exclusively*,
+#' i.e., passing Stage-1 means observing \eqn{>r_1} response.
+#' Overridden if `simon` is given
 #' 
 #' @param R \link[base]{integer} scalar, number of simulations.  Default `1e4L`.
 #' 
@@ -63,10 +63,7 @@ setClass(Class = 'Simon_oc', contains = 'Simon_pr', slots = c(
 #' 
 #' @returns 
 #' 
-#' Function [Simon_oc()] returns \linkS4class{Simon_oc} object
-#' 
-#' @references 
-#' \doi{10.1016/0197-2456(89)90015-9}
+#' Function [Simon_oc] returns \linkS4class{Simon_oc} object
 #' 
 #' @examples 
 #' library(clinfun)
@@ -131,6 +128,7 @@ Simon_oc <- function(
 #' does not have a returned value.
 #' 
 #' @importFrom methods setMethod show signature
+#' @keywords internal
 #' @export
 setMethod(f = show, signature = signature(object = 'Simon_oc'), definition = function(object) {
   cat(Sprintf.Simon_oc(object))
@@ -144,8 +142,7 @@ setMethod(f = show, signature = signature(object = 'Simon_oc'), definition = fun
 
 
 
-#' @importFrom ggplot2 autolayer aes geom_rect coord_polar labs theme guides guide_legend
-#' @importFrom grid unit
+#' @importFrom ggplot2 autolayer aes geom_rect coord_polar labs
 #' @export
 autolayer.Simon_oc <- function(object, ...) {
   pn <- length(prob <- object@prob)
@@ -161,12 +158,6 @@ autolayer.Simon_oc <- function(object, ...) {
   list(
     geom_rect(mapping = aes(ymax = ymax, ymin = ymin, xmax = 1, xmin = 0, fill = nm), alpha = .3, stat = 'identity', colour = 'white'),
     geom_rect(mapping = aes(ymax = ymin + Simon_maxResp, ymin = ymin, xmax = 1, xmin = 0, fill = nm), stat = 'identity', colour = 'white'),
-    theme(
-      legend.key.spacing.y = unit(100, units = 'npc') #?? why not seeing the space??
-    ),
-    #guides(
-    #  fill = guide_legend(byrow = TRUE)
-    #),
     coord_polar(theta = 'y'),
     #coord_radial(theta = 'y'), # dont' understand what this is!!!
     labs(fill = sprintf('Regimen\n(%d Simulated Trials)', R))
@@ -176,10 +167,15 @@ autolayer.Simon_oc <- function(object, ...) {
 
 
 
-#' @importFrom ggplot2 autoplot ggplot theme_void
+#' @importFrom ggplot2 autoplot ggplot theme theme_void
+#' @importFrom grid unit
 #' @export
 autoplot.Simon_oc <- function(object, ...) {
-  ggplot() + autolayer.Simon_oc(object, ...) + theme_void()
+  ggplot() + autolayer.Simon_oc(object, ...) + 
+    theme_void() +
+    theme(
+      legend.key.spacing.y = unit(.02, units = 'npc')
+    )
 }
 
 
@@ -199,6 +195,7 @@ autoplot.Simon_oc <- function(object, ...) {
 #' @returns 
 #' [Sprintf.Simon_oc] returns a \link[base]{noquote} \link[base]{character} scalar.
 #' 
+#' @keywords internal
 #' @export Sprintf.Simon_oc
 #' @export
 Sprintf.Simon_oc <- function(model, ...) {

@@ -1,3 +1,5 @@
+# VisualizeSimon2Stage 0.1.4
+Bug fix
 # VisualizeSimon2Stage 0.1.3
 Accommodate package ggplot2 ver 3.5.0
 # VisualizeSimon2Stage 0.1.2
