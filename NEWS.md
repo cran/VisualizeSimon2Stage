@@ -1,3 +1,5 @@
+# VisualizeSimon2Stage 0.1.5
+Release for R 4.4.0
 # VisualizeSimon2Stage 0.1.4
 Bug fix
 # VisualizeSimon2Stage 0.1.3
