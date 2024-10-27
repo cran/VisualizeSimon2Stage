@@ -13,7 +13,7 @@
 #' Function [print_ph2simon] does not have a returned value.
 #' 
 #' @note
-#' We do not overwrite `clinfun:::print.ph2simon`.
+#' We do not overwrite function `clinfun:::print.ph2simon`.
 #' 
 #' @examples
 #' library(clinfun)

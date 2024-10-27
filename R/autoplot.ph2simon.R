@@ -41,7 +41,6 @@
 #' autoplot(des, type = 'minimax')
 #' 
 #' @importFrom ggplot2 autoplot ggplot theme theme_void
-#' @importFrom grid unit
 #' @name autoplot.ph2simon
 #' @export autoplot.ph2simon
 #' @export
@@ -49,13 +48,14 @@ autoplot.ph2simon <- function(object, ...) {
   ggplot() + autolayer.ph2simon(object, ...) + 
     theme_void() +
     theme(
-      legend.key.spacing.y = unit(.01, units = 'npc')
+      legend.position = 'inside'
     )
 }
 
 
 
-#' @importFrom ggplot2 autolayer aes geom_bar coord_polar xlim labs
+#' @importFrom ggplot2 autolayer aes geom_rect coord_polar ylim labs
+#' @importFrom geomtextpath geom_textpath
 #' @rdname autoplot.ph2simon
 #' @export autolayer.ph2simon
 #' @export
@@ -80,20 +80,24 @@ autolayer.ph2simon <- function(
   } else type <- '(Customized)'
   
   sm <- Simon_pr(prob = c(pu, pa), n1 = n1, n = n, r1 = r1, r = r)
-  dd <- sm@.Data
-  nm <- c(sprintf('Early Termination\n%.1f%% vs. %.1f%%', 1e2*dd[1L,1L], 1e2*dd[2L,1L]),
-          sprintf('Fail\n%.1f%% vs. %.1f%%', 1e2*dd[1L,2L], 1e2*dd[2L,2L]), 
-          #sprintf('Success\n\u03b1 = %.1f%%, 1-\u03b2 = %.1f%%', 1e2*dd[1L,3L], 1e2*dd[2L,3L]))
-          sprintf('Success\nalpha = %.1f%%, power = %.1f%%', 1e2*dd[1L,3L], 1e2*dd[2L,3L]))
+  du <- sm@.Data[1L,]
+  da <- sm@.Data[2L,]
+  nm <- structure(1:3, levels = c('Frail', 'Fail', 'Success'), class = 'factor')
+  
+  max_a <- cumsum(da)
+  min_a <- c(0, max_a[-3L])
+  max_u <- cumsum(du)
+  min_u <- c(0, max_u[-3L])
   
   list(
-    # ?ggplot2::geom_rect wont work here
-    geom_bar(mapping = aes(x = 2, y = dd[1L,], fill = nm), alpha = c(.3, .3, 1), stat = 'identity', color = 'white'),
-    geom_bar(mapping = aes(x = 1, y = dd[2L,], fill = nm), alpha = c(.3, .3, 1), stat = 'identity', color = 'white'),
-    coord_polar(theta = 'y', direction = -1),
-    xlim(.3, 2.5),
-    labs(fill = sprintf(
-      fmt = 'Simon\'s 2-Stage Design\n%s\nResponse Rates: pu=%d%% vs. pa=%d%%\nExpected Total #: %.1f vs. %.1f', 
+    geom_rect(mapping = aes(xmax = max_a, xmin = min_a, ymax = 1, ymin = .7, fill = nm), alpha = .2, colour = 'white'),
+    geom_textpath(mapping = aes(x = (min_a+max_a)/2, y = .9, label = sprintf('%.1f%%', 1e2*da), color = nm), size = 3, show.legend = FALSE),
+    geom_rect(mapping = aes(xmax = max_u, xmin = min_u, ymax = .65, ymin = .35, fill = nm), alpha = .2, colour = 'white', show.legend = FALSE),
+    geom_textpath(mapping = aes(x = (min_u+max_u)/2, y = .55, label = sprintf('%.1f%%', 1e2*du), color = nm), size = 3, show.legend = FALSE),
+    coord_polar(theta = 'x'),
+    ylim(c(0,1.2)),
+    labs(fill = NULL, caption = sprintf(
+      fmt = 'Simon\'s 2-Stage Design\n%s\nResponse Rates: pu=%d%% vs. pa=%d%%\nE(N): %.1f vs. %.1f', 
       switch(type, minimax = {
         'Minimum Total Sample Size'
       }, optimal = {
@@ -105,6 +109,7 @@ autolayer.ph2simon <- function(
       }),
       1e2*pu, 1e2*pa, sm@eN[1L], sm@eN[2L]))
   )
+  
 }
 
 

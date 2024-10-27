@@ -63,7 +63,7 @@ setClass(Class = 'Simon_pr', contains = 'matrix', slots = c(
 #' 
 #' @returns 
 #' 
-#' [Simon_pr] returns \linkS4class{Simon_pr} object.
+#' Function [Simon_pr] returns \linkS4class{Simon_pr} object.
 #' 
 #' @examples 
 #' Simon_pr(prob = c(.2, .4), n1 = 15L, r1 = 3L, n = 24L, r = 7L)
@@ -158,19 +158,27 @@ setMethod(f = show, signature = signature(object = 'Simon_pr'), definition = fun
 
 
 
-#' @importFrom ggplot2 autolayer aes geom_rect coord_polar labs
+#' @importFrom ggplot2 autolayer aes geom_rect coord_polar ylim labs
+#' @importFrom geomtextpath geom_textpath
 #' @export
 autolayer.Simon_pr <- function(object, ...) {
   object <- object[1L] # `[.Simon_pr`
   obj <- unclass(object)
-  nm <- paste(c('Early Termination', 'Fail', 'Success'), sprintf(fmt = '%.1f%%', 1e2*obj))
-  ymax <- cumsum(obj)
-  ymin <- c(0, ymax[-3L])
+  
+  nm <- c('Early Termination', 'Fail', 'Success')
+  max_ <- cumsum(obj)
+  min_ <- c(0, max_[-3L])
+  
   list(
-    geom_rect(mapping = aes(ymax = ymax, ymin = ymin, xmax = 1, xmin = 0, fill = nm), colour = 'white'),
-    coord_polar(theta = 'y'),
-    labs(fill = sprintf(fmt = 'Simon\'s 2-Stage\nResponse Rate %.0f%%\nExpected Total # = %.1f', 1e2*object@prob, object@eN))
+    geom_rect(mapping = aes(xmax = max_, xmin = min_, ymax = 1, ymin = .7, fill = nm), alpha = .4, colour = 'white', show.legend = FALSE),
+    geom_textpath(mapping = aes(x = (min_+max_)/2, y = 1.1, label = nm, color = nm), show.legend = FALSE),
+    geom_textpath(mapping = aes(x = (min_+max_)/2, y = .9, label = sprintf(fmt = '%.1f%%', 1e2*obj), color = nm), show.legend = FALSE),
+    ylim(c(0,1.2)),
+    coord_polar(theta = 'x'),
+    labs(caption = sprintf(fmt = 'Response Rate %.0f%%; E(N) = %.1f', 1e2*object@prob, object@eN))
   )
+  
+  
 }
 
 

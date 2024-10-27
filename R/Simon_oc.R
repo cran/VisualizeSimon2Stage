@@ -63,7 +63,7 @@ setClass(Class = 'Simon_oc', contains = 'Simon_pr', slots = c(
 #' 
 #' @returns 
 #' 
-#' Function [Simon_oc] returns \linkS4class{Simon_oc} object
+#' Function [Simon_oc] returns \linkS4class{Simon_oc} object.
 #' 
 #' @examples 
 #' library(clinfun)
@@ -142,25 +142,33 @@ setMethod(f = show, signature = signature(object = 'Simon_oc'), definition = fun
 
 
 
-#' @importFrom ggplot2 autolayer aes geom_rect coord_polar labs
+#' @importFrom ggplot2 autolayer aes geom_rect coord_polar scale_fill_discrete ylim labs
+#' @importFrom geomtextpath geom_textpath
 #' @export
 autolayer.Simon_oc <- function(object, ...) {
   pn <- length(prob <- object@prob)
   R <- sum(object@maxResp)
   maxResp <- object@maxResp
   Simon_maxResp <- object@Simon_maxResp
-  ymax <- cumsum(maxResp)
-  ymin <- c(0, ymax[-pn])
-  nm <- sprintf(
-    fmt = '%s; p = %.f%%\nHaving Max # of Responses: %.1f%%\nHaving Max # of Responses & Simon\'s Success: %.1f%%\nExpected Sample Size: %.1f', 
-    names(prob), 1e2*prob, 1e2*maxResp/R, 1e2*Simon_maxResp/R, object@eN)
+  max_ <- cumsum(maxResp)
+  min_ <- c(0, max_[-pn])
+  
+  nm <- names(prob)
+  legd <- sprintf(fmt = '%s; E(N)=%.1f', names(prob), object@eN)
+  nm1 <- sprintf(fmt = 'Pr(%s)=%.f%%', names(prob), 1e2*prob)
+  pr_simon <- sprintf(fmt = '%.1f%%', 1e2*Simon_maxResp/R)
+  pr <- sprintf(fmt = '%.1f%%', 1e2*maxResp/R)
   
   list(
-    geom_rect(mapping = aes(ymax = ymax, ymin = ymin, xmax = 1, xmin = 0, fill = nm), alpha = .3, stat = 'identity', colour = 'white'),
-    geom_rect(mapping = aes(ymax = ymin + Simon_maxResp, ymin = ymin, xmax = 1, xmin = 0, fill = nm), stat = 'identity', colour = 'white'),
-    coord_polar(theta = 'y'),
-    #coord_radial(theta = 'y'), # dont' understand what this is!!!
-    labs(fill = sprintf('Regimen\n(%d Simulated Trials)', R))
+    geom_rect(mapping = aes(xmax = max_, xmin = min_, ymax = 1, ymin = .7, fill = nm), alpha = .1, stat = 'identity', colour = 'white', show.legend = FALSE),
+    geom_rect(mapping = aes(xmax = min_ + Simon_maxResp, xmin = min_, ymax = 1, ymin = .7, fill = nm), alpha = .3, stat = 'identity', colour = 'white'),
+    geom_textpath(mapping = aes(x = (min_+max_)/2, y = .65, label = pr, color = nm), size = 3, show.legend = FALSE),
+    geom_textpath(mapping = aes(x = (min_+(min_ + Simon_maxResp))/2, y = .95, label = pr_simon, color = nm), size = 3, show.legend = FALSE),
+    geom_textpath(mapping = aes(x = (min_+max_)/2, y = 1.1, label = nm1, color = nm), show.legend = FALSE),
+    scale_fill_discrete(breaks = nm, labels = legd, name = NULL),
+    ylim(c(0,1.2)),
+    coord_polar(theta = 'x'),
+    labs(caption = sprintf('Based on %d simulations', R))
   )
 }
 
@@ -168,13 +176,12 @@ autolayer.Simon_oc <- function(object, ...) {
 
 
 #' @importFrom ggplot2 autoplot ggplot theme theme_void
-#' @importFrom grid unit
 #' @export
 autoplot.Simon_oc <- function(object, ...) {
   ggplot() + autolayer.Simon_oc(object, ...) + 
     theme_void() +
     theme(
-      legend.key.spacing.y = unit(.02, units = 'npc')
+      legend.position = 'inside'
     )
 }
 

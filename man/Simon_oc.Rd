@@ -46,7 +46,7 @@ Overridden if \code{simon} is given}
 \item{...}{potential parameters, currently not in use}
 }
 \value{
-Function \link{Simon_oc} returns \linkS4class{Simon_oc} object
+Function \link{Simon_oc} returns \linkS4class{Simon_oc} object.
 }
 \description{
 Operating characteristics of Simon's two-stage design.

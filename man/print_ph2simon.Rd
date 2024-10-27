@@ -18,7 +18,7 @@ Function \link{print_ph2simon} does not have a returned value.
 An alternate \link[base]{print} method for \link[clinfun]{ph2simon} object.
 }
 \note{
-We do not overwrite \code{clinfun:::print.ph2simon}.
+We do not overwrite function \code{clinfun:::print.ph2simon}.
 }
 \examples{
 library(clinfun)

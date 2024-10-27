@@ -19,7 +19,7 @@ i.e., passing Stage-1 indicates observing \eqn{>r_1} responses,
 and rejecting \eqn{H_0} indicates observing \eqn{>r} responses.}
 }
 \value{
-\link{Simon_pr} returns \linkS4class{Simon_pr} object.
+Function \link{Simon_pr} returns \linkS4class{Simon_pr} object.
 }
 \description{
 Probability of frail
