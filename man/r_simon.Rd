@@ -2,30 +2,45 @@
 % Please edit documentation in R/r_simon.R
 \name{r_simon}
 \alias{r_simon}
+\alias{r_simon.ph2simon}
+\alias{r_simon.ph2simon4}
 \title{Random Generator based on Simon's Two-Stage Design}
 \usage{
-r_simon(R, n1, n, r1, prob)
+r_simon(R, prob, object, ...)
+
+\method{r_simon}{ph2simon}(R, prob, object, ...)
+
+\method{r_simon}{ph2simon4}(
+  R,
+  prob,
+  object,
+  ...,
+  r1 = object@r1,
+  n1 = object@n1,
+  r = object@r,
+  n = object@n
+)
 }
 \arguments{
 \item{R}{positive \link[base]{integer} scalar, number of trials \eqn{R}}
 
-\item{n1, n}{positive \link[base]{integer} scalars, Stage-1 sample size \eqn{n_1} and total sample size \eqn{n}}
-
-\item{r1}{non-negative \link[base]{integer} scalar, number of response
-in Stage-1 \eqn{r_1} required \emph{exclusively},
-i.e., passing Stage-1 indicates observing \eqn{>r_1} responses}
-
 \item{prob}{\link[base]{double} scalar, true response rate \eqn{p}}
+
+\item{object}{a \link[clinfun]{ph2simon} or \linkS4class{ph2simon4} object}
+
+\item{...}{parameters of function \code{\link[=ph2simon4]{ph2simon4()}}, most importantly \code{type}}
+
+\item{r1, n1, r, n}{(optional) \link[base]{integer} scalars, see \linkS4class{ph2simon4}.}
 }
 \value{
-Function \link{r_simon} returns an \link[base]{integer} \link[base]{vector} of length \eqn{R},
+Function \code{\link[=r_simon]{r_simon()}} returns an \link[base]{integer} \link[base]{vector} of length \eqn{R},
 which are the \eqn{R} copies of the number of responses in the Simon's two-stage design.
 }
 \description{
 Random generator based on Simon's two-stage design.
 }
 \details{
-Function \link{r_simon} generates \eqn{R} copies of the number of responses \eqn{y} in the Simon's two-stage design.
+Function \code{\link[=r_simon]{r_simon()}} generates \eqn{R} copies of the number of responses \eqn{y} in \strong{one} Simon's two-stage design.
 The conclusion of the trials are,
 \describe{
 \item{\eqn{y \leq r_1}}{indicates early termination}
@@ -35,14 +50,14 @@ The conclusion of the trials are,
 
 Here \eqn{r} is not needed to \emph{generate} the random number of responses \eqn{y}.
 Instead, \eqn{r} is needed to \emph{determine} if the trial is a failure or a success.
-Therefore, \eqn{r} is not a parameter in \link{r_simon}.
+Therefore, \eqn{r} is not a parameter of function \code{\link[=r_simon]{r_simon()}}.
 }
 \examples{
-library(clinfun)
-ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1) # using 'Optimal'
-# set.seed if needed 
-(ys = r_simon(R = 10L, n1 = 19L, n = 54L, r1 = 4L, prob = .3))
-table(cut.default(ys, breaks = c(0, 4L, 15L, 54L), right = TRUE,
-  labels = c('early-termination', 'fail', 'success')))
-
+(x = clinfun::ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
+set.seed(1532); r = r_simon(R = 1e2L, prob = .2, object = x)
+set.seed(1532); r1 = r_simon.ph2simon4(R = 1e2L, prob = .2, r1 = 5L, n1 = 24L, r = 13L, n = 45L)
+stopifnot(identical(r, r1))
+table(attr(r, 'dx')) # look at beta, <10\%
+set.seed(24315); r2 = r_simon(R = 1e2L, prob = .4, object = x)
+table(attr(r2, 'dx')) # look at alpha, <5\%
 }
