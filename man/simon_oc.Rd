@@ -53,3 +53,4 @@ The summation of \code{maxResp} is the number of simulation copies.}
 the frequencies of each regime having maximum response and success in Simon's two-stage trial.}
 }}
 
+\keyword{internal}

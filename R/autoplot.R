@@ -31,10 +31,20 @@ autoplot.ph2simon <- function(object, ...) {
     )
 }
 
-
-
-#' @importFrom ggplot2 autolayer aes geom_bar coord_polar xlim labs
 #' @rdname gg_ph2simon
+#' @export autoplot.ph2simon4
+#' @export
+autoplot.ph2simon4 <- function(object, ...) {
+  ggplot() + autolayer.ph2simon4(object, ...) + 
+    theme_void() +
+    theme(
+      legend.key.spacing.y = unit(.01, units = 'npc')
+    )
+}
+
+
+#' @rdname gg_ph2simon
+#' @importFrom ggplot2 autolayer aes geom_bar coord_polar xlim labs
 #' @export autolayer.ph2simon4
 #' @export
 autolayer.ph2simon4 <- function(

@@ -1,44 +1,15 @@
 
 
-#' @title Visualize Simon\'s Two-Stage Design
-#'
-#' @description
-#'
-#' Functions for visualizing the probabilities of early termination, fail and success of 
-#' Simon's two-stage design.   
-#' Functions for evaluating and visualizing the operating characteristics of 
-#' Simon's two-stage design.
-#'
-#' @examples
-#' (x = clinfun::ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
+
+# @references 
+# \doi{10.1016/0197-2456(89)90015-9}
+
+
+#' @note
+#' Help files of individual functions are intentionally suppressed in the `pdf` manual.
+#' Users are encouraged to get started with 
 #' 
-#' # an alternative print
-#' print_ph2simon(x)
-#' 
-#' # language for a report
-#' Sprintf.ph2simon(x, type = 'minimax')
-#' Sprintf.ph2simon(x, type = 'optimal')
-#' Sprintf.ph2simon(x, type = 'n1')
-#' Sprintf.ph2simon(x, type = 'maximax')
-#' 
-#' autoplot(x, type = 'minimax')
-#' autoplot(x, type = 'optimal')
-#' autoplot(x, type = 'n1')
-#' autoplot(x, type = 'maximax')
-#' 
-#' # operating characteristics
-#' simon_oc(prob = c(A = .3, B = .2, C = .15), object = x, type = 'minimax')
-#' simon_oc(prob = c(A = .3, B = .2, C = .15), object = x, type = 'optimal')
-#' 
-#' # example with r1 = 0
-#' (x1 = clinfun::ph2simon(pu = .05, pa = .3, ep1 = .05, ep2 = .2))
-#' # works with all of our functions
-#' autoplot(x1, type = 'optimal') # etc.
-#' 
-#' @references 
-#' \doi{10.1016/0197-2456(89)90015-9}
-#' 
-#' \url{https://www.ncss.com/software/pass/}
+#' `vignette('intro', package = 'VisualizeSimon2Stage')`
 #' 
 #' @import methods
 '_PACKAGE'

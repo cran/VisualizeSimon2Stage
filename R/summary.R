@@ -16,10 +16,6 @@
 #' \item{`'p'`}{\link[base]{double} \link[base]{matrix}}
 #' }
 #' 
-#' @examples
-#' (x = clinfun::ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
-#' summary(x)
-#' summary(x, type = c('minimax', 'optimal', 'n1', 'maximax'))
 #' @keywords internal
 #' @name summary_ph2simon
 #' @export summary.ph2simon4
@@ -38,7 +34,8 @@ summary.ph2simon4 <- function(object, ...) {
   colnames(ret_EN) <- paste0('EN(', c('pu', 'pa'), ')')
   
   ret_p <- sm |> 
-    lapply(FUN = function(i) {
+    #lapply(FUN = \(i) {
+    lapply(FUN = \(i) { # does CRAN accept this as of Spring 2025?
       c(i@frail, i@reject[1L], 1-i@reject[2L])
     }) |> 
     do.call(what = rbind)

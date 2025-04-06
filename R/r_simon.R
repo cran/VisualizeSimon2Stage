@@ -32,14 +32,7 @@
 #' Function [r_simon()] returns an \link[base]{integer} \link[base]{vector} of length \eqn{R},
 #' which are the \eqn{R} copies of the number of responses in the Simon's two-stage design.
 #' 
-#' @examples
-#' (x = clinfun::ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
-#' set.seed(1532); r = r_simon(R = 1e2L, prob = .2, object = x)
-#' set.seed(1532); r1 = r_simon.ph2simon4(R = 1e2L, prob = .2, r1 = 5L, n1 = 24L, r = 13L, n = 45L)
-#' stopifnot(identical(r, r1))
-#' table(attr(r, 'dx')) # look at beta, <10%
-#' set.seed(24315); r2 = r_simon(R = 1e2L, prob = .4, object = x)
-#' table(attr(r2, 'dx')) # look at alpha, <5%
+#' @keywords internal
 #' @name r_simon
 #' @export
 r_simon <- function(R, prob, object, ...) UseMethod(generic = 'r_simon', object = object)

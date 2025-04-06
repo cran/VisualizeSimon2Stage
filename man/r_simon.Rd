@@ -52,12 +52,4 @@ Here \eqn{r} is not needed to \emph{generate} the random number of responses \eq
 Instead, \eqn{r} is needed to \emph{determine} if the trial is a failure or a success.
 Therefore, \eqn{r} is not a parameter of function \code{\link[=r_simon]{r_simon()}}.
 }
-\examples{
-(x = clinfun::ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
-set.seed(1532); r = r_simon(R = 1e2L, prob = .2, object = x)
-set.seed(1532); r1 = r_simon.ph2simon4(R = 1e2L, prob = .2, r1 = 5L, n1 = 24L, r = 13L, n = 45L)
-stopifnot(identical(r, r1))
-table(attr(r, 'dx')) # look at beta, <10\%
-set.seed(24315); r2 = r_simon(R = 1e2L, prob = .4, object = x)
-table(attr(r2, 'dx')) # look at alpha, <5\%
-}
+\keyword{internal}

@@ -17,7 +17,7 @@
 #' @aliases show,simon_oc-method
 #' @export
 setMethod(f = show, signature = 'simon_oc', definition = function(object) {
-  object |> Sprintf.simon_oc() |> cat()
+  # object |> Sprintf.simon_oc() |> cat() # no longer print
   object |> autoplot.simon_oc() |> print()
 })
 
@@ -27,13 +27,10 @@ setMethod(f = show, signature = 'simon_oc', definition = function(object) {
 #' @aliases show,simon_pr-method
 #' @export
 setMethod(f = show, signature = 'simon_pr', definition = function(object) {
-  ret <- cbind(object@frail, 1-object@frail-object@reject, object@reject)
-  ret[] <- sprintf(fmt = '%.1f%%', 1e2*ret)
-  dimnames(ret) <- list('Response Rate & E(N)' = sprintf(fmt = '%.0f%%; %.1f', 1e2*object@prob, object@eN), 
-                        'Probabilities' = c('Early Termination', 'Fail', 'Success'))
-  print(ret, right = TRUE, quote = FALSE)
-  
-  object |> autoplot.simon_pr() |> print()
+  object |> 
+    as_flextable.simon_pr() |> 
+    print()
+  # object |> autoplot.simon_pr() |> print() # skip this
 })
 
 

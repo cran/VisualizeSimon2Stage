@@ -1,0 +1,247 @@
+---
+title: "Visualize Simon\\'s Two-Stage Phase II Design"
+author: Tingting Zhan
+format: 
+  html:
+    page-layout: full
+    html-math-method: katex
+toc: true
+toc-location: left
+toc-depth: 4
+toc-title: ''
+editor: visual
+vignette: >
+  %\VignetteIndexEntry{intro}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction
+
+This vignette of package **`VisualizeSimon2Stage`** ([CRAN](https://cran.r-project.org/package=VisualizeSimon2Stage), [Github](https://github.com/tingtingzhan/VisualizeSimon2Stage), [RPubs](https://rpubs.com/tingtingzhan/VisualizeSimon2Stage)) documents the visualization of probabilities and operating characteristics of Simon\\'s two-stage Phase II design.
+
+## Note to Users
+
+Examples in this vignette require that the `search` path has
+
+```{r}
+#| message: false
+library(VisualizeSimon2Stage)
+library(clinfun)
+library(flextable)
+library(ggplot2)
+```
+
+```{r}
+#| echo: false
+library(knitr) # for tables in this vignette
+#options(mc.cores = 1L) # for CRAN submission
+```
+
+## Terms and Abbreviations
+
+```{r}
+#| echo: false
+#| results: asis
+c(
+  '', 'Forward pipe operator', '`?base::pipeOp` introduced in `R` 4.1.0', 
+  '`$`', 'Extract parts of an object', '`` ?base::`$` ``',
+  '`binom`', 'Binomial density and distribution', '`?stats::dbinom`, <https://en.wikipedia.org/wiki/Binomial_distribution>',
+  '`CRAN`, `R`', 'The Comprehensive R Archive Network', '<https://cran.r-project.org>',
+  '`class`', 'Object class', '`?base::class`',
+  '`flextable`', 'Flexible tables', '`?flextable::flextable`',
+  '`PASS`', 'Power Analysis & Sample Size', '<https://www.ncss.com/software/pass/>', 
+  '`PET`', 'Probability of early termination', '',
+  '`ph2simon`', 'Simon\'s 2-stage Phase II design', '`clinfun::ph2simon`',
+  '`S3`, `generic`, `methods`', '`S3` object oriented system',  '`base::UseMethod`; `utils::methods`; `utils::getS3method`; <https://adv-r.hadley.nz/s3.html>',
+  '`S4`, `generic`, `methods`', '`S4` object oriented system',  '`base::isS4`; `methods::setClass`; `methods::getMethod`; <https://adv-r.hadley.nz/s4.html>',
+  '`search`', 'Search path', '`?base::search`',
+  '`seed`', 'Random number generation seed', '`?base::set.seed`',
+  '`table`', 'Cross tabulation', '`?base::table`'
+) |>
+  matrix(nrow = 3L, dimnames = list(c('Term / Abbreviation', 'Description', 'Reference'), NULL)) |>
+  t.default() |>
+  as.data.frame.matrix() |> 
+  kable() 
+```
+
+# Simon's Two-Stage Phase II Design
+
+## Notations
+
+Simon's two-stage design tests the one-sided hypothesis $H_0: p\leq p_u$ vs. $H_a: p>p_u$ for a binary response in the following steps.
+
+1.  Enroll $n_1$ subjects.
+
+-   **Early termination**, or **frail**, if $\leq r_1$ positive responses are observed.
+-   Move to next stage if $>r_1$ response are observed.
+
+2.  Enroll an additional $(n-n_1)$ subjects.
+
+-   **Fail**, if $\leq r$ total responses are observed.
+-   **Success**, or $H_0$ rejected, if $>r$ total responses are observed.
+
+In this vignette, we use $p_u$ to denote the unacceptable response rate, and $p_a$ the acceptable response rate. The parameter nomenclature of $r_1$, $n_1$, $r$ and $n$ follows that of `PASS` and of function `clinfun::ph2simon()`.
+
+Types of Simon's two-stage design include
+
+-   `'minimax'` (default), minimum total sample size $n$
+-   `'optimal'`, minimum expected total sample size $\textrm{E}(n|p=p_u)$
+-   `'n1'`, minimum Stage-1 sample size $n_1$
+-   `'maximax'`, to use up the user-provided maximum total sample size, i.e., parameter `nmax` of function `clinfun::ph2simon()`
+-   `'all'`, all `type`s listed above
+
+## `S3` class `'ph2simon'`
+
+Function `clinfun::ph2simon()` returns an object of `S3` class `'ph2simon'`. The output is printed in the `R` console using `S3` method dispatch `clinfun:::print.ph2simon()`.
+
+Example below provides the various Simon's two-stage designs for hypotheses $p_u=.2$, $p_a=.4$, with Type-I error rate $\alpha=5\%$ and Type-II error rate $\beta=10\%$.
+
+```{r}
+(x = ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
+```
+
+## `S4` class `'ph2simon4'`
+
+Function `ph2simon4()` converts an `S3` object `'ph2simon'` to an `S4` object `'ph2simon4'`. The output is printed in the `R` console using `S4` method dispatch `getMethod(f = 'show', signature = 'ph2simon4')`.
+
+```{r}
+x |> ph2simon4(type = 'all')
+```
+
+# Probabilities
+
+## Math
+
+Given a Simon's two-stage design $(r_1,n_1,r,n)$ and a true response rate $p$, we have
+
+-   the number of Stage-1 positive responses $X_1 \sim \textrm{binom}(n_1, p)$.
+-   the number of Stage-2 positive responses $X_2 \sim \textrm{binom}(n-n_1, p)$.
+-   $X_1$ and $X_2$ are independent.
+
+The probability of early termination is $$
+p_{\textrm{frail}} = \textrm{Pr}(X_1 \leq r_1)
+$$
+
+The probability of failure to reject $H_0$ is $$
+\sum_{s_1 = r_1+1}^{n_1} \textrm{Pr}(X_1=s_1)\cdot\textrm{Pr}\left(X_2 \leq (r-s_1)\right)
+$$
+
+The probability of successfully rejecting $H_0$ is $$
+\sum_{s_1 = r_1+1}^{n_1} \textrm{Pr}(X_1=s_1)\cdot\textrm{Pr}(X_2 > (r-s_1))
+$$
+
+The expected sample size is $$
+\textrm{E}(n) = p_{\textrm{frail}} \cdot n_1 + (1 - p_{\textrm{frail}}) \cdot n
+$$
+
+## Numbers
+
+The S3 generic `simon_pr()` calculates the probabilities of early termination, fail and success at one-or-more response probability $p$, either from an `S3` object `'ph2simon'`,
+
+```{r}
+x |> simon_pr(prob = c(.2, .3, .4)) |> as_flextable()
+```
+
+or from an `S4` object `'ph2simon4'`,
+
+```{r}
+x |> ph2simon4() |> simon_pr(prob = c(.2, .3, .4)) |> as_flextable()
+```
+
+or from the design parameters `r1`, `n1`, `r` and `n`. In such case the user must call the `S3` method dispatch `simon_pr.ph2simon4()` explicitly.
+
+```{r}
+simon_pr.ph2simon4(prob = c(.2, .3, .4), r1 = 5L, n1 = 24L, r = 13L, n = 45L) |>
+  as_flextable()
+```
+
+## Visualization
+
+The S3 generic `ggplot2::autoplot()` visualize the probabilities of early termination, fail and success at $p_u$ and $p_a$. The donut slices for success are colored with the highest opacity, indicating that they represent the Type-I error rate $\alpha$ if $p=p_u$, and the power $1-\beta$ if $p=p_a$. The probabilities are visualized either from an `S3` object `'ph2simon'`,
+
+```{r}
+x |> autoplot(type = 'optimal')
+```
+
+or from an `S4` object `'ph2simon4'`.
+
+```{r}
+x |> ph2simon4(type = 'optimal') |> autoplot()
+```
+
+## Simulation
+
+The S3 generic `r_simon()` simulates the number of positive responses in Simon's two-stage design. Following examples showing simulations at $p_u=.2$, either from an `S3` object `'ph2simon'`,
+
+```{r}
+set.seed(15); r_u = x |> r_simon(R = 1e4L, prob = .2, type = 'optimal')
+```
+
+or from an `S4` object `'ph2simon4'`,
+
+```{r}
+set.seed(15); r_u1 = x |> ph2simon4(type = 'optimal') |> r_simon(R = 1e4L, prob = .2)
+stopifnot(identical(r_u, r_u1))
+```
+
+or from the design parameters `r1`, `n1`, `r` and `n`. In such case the user must call the `S3` method dispatch `r_simon.ph2simon4()` explicitly.
+
+```{r}
+set.seed(15); r_u2 = r_simon.ph2simon4(R = 1e4L, prob = .2, r1 = 4L, n1 = 19L, r = 15L, n = 54L)
+stopifnot(identical(r_u, r_u2))
+```
+
+It is easy to illustrate that the Type-I error rate is controlled at $\alpha<5\%$ when $p=p_u=.2$,
+
+```{r}
+r_u |> attr(which = 'dx', exact = TRUE) |> table() |> 
+  as_flextable() |> set_caption(caption = 'pu = .2')
+```
+
+and the Type-II error rate is controlled at $\beta<10\%$, or power $(1-\beta)>90\%$, when $p=p_a=.4$.
+
+```{r}
+set.seed(24); x |> r_simon(R = 1e4L, prob = .4) |>
+  attr(which = 'dx', exact = TRUE) |> table() |> 
+  as_flextable() |> set_caption(caption = 'pa = .4')
+```
+
+```{r}
+#| eval: false
+#| echo: false
+#| results: hide
+summary(x)
+summary(x, type = 'all')
+```
+
+# Operating Characteristics
+
+Suppose we have three drugs $A$, $B$ and $C$, with true response rate $p^A=.3$, $p^B=.2$ and $p^C=.15$, respectively.
+
+```{r}
+p = c(A = .3, B = .2, C = .15)
+```
+
+We simulated `1e4L` Simon's two-stage trials of each drug to obtain the **operating characteristics**, i.e., the percentage of trials in which each drug
+
+-   having the highest number of responses
+-   both having the highest number of responses *and* successfully rejecting the null hypothesis.
+
+The operating characteristics are visualized either from an `S3` object `'ph2simon'`,
+
+```{r}
+set.seed(52); x |> simon_oc(prob = p, R = 1e4L, type = 'optimal')
+```
+
+or from an `S4` object `'ph2simon4'`,
+
+```{r}
+set.seed(52); x |> ph2simon4(type = 'optimal') |> simon_oc(prob = p, R = 1e4L)
+```
+
+or from the design parameters `r1`, `n1`, `r` and `n`. In such case the user must call the `S3` method dispatch `simon_oc.ph2simon4()` explicitly.
+
+```{r}
+set.seed(52); simon_oc.ph2simon4(prob = p, R = 1e4L, r1 = 4L, n1 = 19L, r = 15L, n = 54L)
+```

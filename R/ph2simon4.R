@@ -7,18 +7,13 @@
 #' 
 #' @param ... additional parameters, currently not in use
 #' 
-#' @examples
-#' (x = clinfun::ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
-#' ph2simon4(x, type = 'opt')
-#' ph2simon4(x) # default type = 'minimax'
+#' @keywords internal
 #' @export
 ph2simon4 <- function(object, type = 'minimax', ...) {
   
-  # [print_ph2simon()] uses multiple `type`
-  
   type <- type |>
-    vapply(FUN = match.arg, choices = c('minimax', 'optimal', 'n1', 'maximax'), FUN.VALUE = '') |> 
-    unname()
+    match.arg(choices = c('minimax', 'optimal', 'n1', 'maximax', 'all'))
+  if (type == 'all') type <- c('minimax', 'optimal', 'n1', 'maximax')
   
   x <- object$out # sorted by column 'n'
   # colnames(x)

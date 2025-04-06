@@ -1,25 +1,26 @@
 Package: VisualizeSimon2Stage
 Type: Package
 Title: Visualize Simon's Two-Stage Design
-Version: 0.1.7
-Date: 2025-03-18
+Version: 0.2.0
+Date: 2025-04-06
 Description: To visualize the probabilities of early termination, fail
         and success of Simon's two-stage design.  To evaluate and
         visualize the operating characteristics of Simon's two-stage
         design.
 License: GPL-2
-Imports: methods
+Imports: methods, flextable, ggplot2, officer
 Encoding: UTF-8
 Authors@R: c(person(given = "Tingting", family = "Zhan", role = c("aut",
         "cre"), email = "tingtingzhan@gmail.com", comment = c(ORCID =
         '0000-0001-9971-4844')))
 Language: en-US
-Depends: R (>= 4.4.0), ggplot2
-Suggests: clinfun
+Depends: R (>= 4.4.0)
+Suggests: clinfun, knitr, quarto, rmarkdown
 RoxygenNote: 7.3.2
+VignetteBuilder: quarto
 NeedsCompilation: no
-Packaged: 2025-03-18 18:45:32 UTC; tingtingzhan
+Packaged: 2025-04-06 18:19:36 UTC; tingtingzhan
 Author: Tingting Zhan [aut, cre] (<https://orcid.org/0000-0001-9971-4844>)
 Maintainer: Tingting Zhan <tingtingzhan@gmail.com>
 Repository: CRAN
-Date/Publication: 2025-03-18 19:00:02 UTC
+Date/Publication: 2025-04-06 18:30:02 UTC

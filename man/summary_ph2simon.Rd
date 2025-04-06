@@ -26,9 +26,4 @@ Function \code{\link[=summary.ph2simon]{summary.ph2simon()}} returns a \link[bas
 \description{
 Summarize a Simon's two-stage design
 }
-\examples{
-(x = clinfun::ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
-summary(x)
-summary(x, type = c('minimax', 'optimal', 'n1', 'maximax'))
-}
 \keyword{internal}

@@ -15,10 +15,7 @@
 #' 
 #' Function [simon_pr()] returns \linkS4class{simon_pr} object.
 #' 
-#' @examples
-#' (x = clinfun::ph2simon(pu = .2, pa = .4, ep1 = .05, ep2 = .1)) 
-#' simon_pr(prob = c(.2, .3, .4), object = x)
-#' simon_pr.ph2simon4(prob = c(.2, .3, .4), r1 = 5L, n1 = 24L, r = 13L, n = 45L) # internal use
+#' @keywords internal
 #' @export
 simon_pr <- function(prob, object, ...) UseMethod(generic = 'simon_pr', object = object)
 
@@ -57,7 +54,7 @@ simon_pr.ph2simon4 <- function(
   # early termination; Prob(X1 <= r1), where X1 ~ Binom(n1, p)
   # vectorize on `prob`
   
-  reject <- vapply(prob, FUN = function(p) {
+  reject <- vapply(prob, FUN = \(p) {
     # `p`: response rate
     d1s <- dbinom(x = s1, size = n1, prob = p)
     sum(d1s * pbinom(q = r - s1, size = n - n1, prob = p, lower.tail = FALSE))
@@ -86,6 +83,49 @@ simon_pr.ph2simon4 <- function(
   x@eN <- x@eN[i]
   x@prob <- x@prob[i]
   return(x)
+}
+
+
+
+#' @title Convert \linkS4class{ph2simon4} to \link[flextable]{flextable}
+#' 
+#' @param x a \linkS4class{ph2simon4}
+#' 
+#' @param ... additional parameters, currently not in use
+#' 
+#' @returns 
+#' Function [as_flextable.simon_pr()] returns a \link[flextable]{flextable}
+#' 
+#' @keywords internal
+#' @importFrom officer fp_border
+#' @importFrom flextable as_flextable flextable autofit add_header_row align vline
+#' @export as_flextable.simon_pr
+#' @export
+as_flextable.simon_pr <- function(x, ...) {
+  p <- cbind(
+    'Early Termination' = x@frail, 
+    'Fail' = 1-x@frail-x@reject, 
+    'Success' = x@reject)
+  p[] <- sprintf(fmt = '%.1f%%', 1e2*p)
+  
+  border_hard_ <- fp_border(width = 1.5, color = 'gray40')
+  # *looks* like default border used in ?flextable::flextable
+  # tzh does *not* know how to find out for sure, for now..
+  # ?flextable:::print.flextable
+  # ?flextable::htmltools_value
+  
+  data.frame(
+    'Response Rate' = sprintf(fmt = 'p = %.0f%%', 1e2*x@prob),
+    'E(N)' = sprintf(fmt = '%.1f', x@eN),
+    p,
+    check.names = FALSE
+  ) |>
+    flextable() |>
+    autofit() |>
+    add_header_row(values = c(' ', ' ', 'Probabilities'), colwidths = c(1L, 1L, 3L), top = TRUE) |>
+    align(align = 'center', part = 'all') |>
+    vline(j = 2L, border = border_hard_, part = 'all')
+  
 }
 
 

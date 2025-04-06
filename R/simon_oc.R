@@ -23,6 +23,7 @@
 #' @returns 
 #' Function [simon_oc()] returns \linkS4class{simon_oc} object.
 #' 
+#' @keywords internal
 #' @export
 simon_oc <- function(prob, R, object, ...) UseMethod(generic = 'simon_oc', object = object)
 

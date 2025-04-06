@@ -24,7 +24,7 @@ Sprintf.ph2simon4 <- function(model, ...) {
   msum <- summary.ph2simon4(model, ...)
   
   sprintf(
-    fmt = 'Simon\'s %s two-stage design for testing the null hypothesis p\u207A\u2264%.f%% versus the alternative hypothesis p\u207A>%.f%% with type-I-error rate %.1f%%, as described below, will achieve %.1f%% power at true p\u207A=%.0f%%. The drug will be tested on %d patients in the first stage. The trial will be terminate early if %d or fewer patients respond (early termination probability %.1f%% under the null p\u207A=%.f%%). Otherwise another %d patients will be enrolled in the second stage and the drug will be rejected if the total number of patients responding is %d or fewer. This design requires a maximum sample size of %d patients, with an expected sample size of %.1f patients under the null p\u207A=%.f%%. This design is provided by [R] package [clinfun].',
+    fmt = 'Simon\'s %s two-stage design for testing the null hypothesis p\u207A\u2264%.f%% versus the alternative hypothesis p\u207A>%.f%% with type-I-error rate %.1f%%, as described below, will achieve %.1f%% power at true p\u207A=%.0f%%. The drug will be tested on %d patients in the first stage. The trial will be terminate early if %d or fewer patients respond (early termination probability %.1f%% under the null p\u207A=%.f%%). Otherwise another %d patients will be enrolled in the second stage and the drug will be rejected if the total number of patients responding is %d or fewer. This design requires a maximum sample size of %d patients, with an expected sample size of %.1f patients under the null p\u207A=%.f%%. This design is provided by <u>**`R`**</u> package <u>**`clinfun`**</u>.',
     model@type,  
     1e2*model@pu, 1e2*model@pu, 1e2*model@alpha, 1e2*(1-model@beta), 1e2*model@pa,
     n1, r1, 1e2*msum$p[,'PET(pu)'], 1e2*model@pu, 
@@ -56,7 +56,6 @@ Sprintf.ph2simon <- function(model, ...) model |> ph2simon4(...) |> Sprintf.ph2s
 #' Function [Sprintf.simon_oc()] returns a \link[base]{character} scalar.
 #' 
 #' @keywords internal
-#' @export Sprintf.simon_oc
 #' @export
 Sprintf.simon_oc <- function(model, ...) {
   nm <- names(prob <- model@prob)

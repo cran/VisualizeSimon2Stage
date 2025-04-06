@@ -3,11 +3,14 @@
 \name{gg_ph2simon}
 \alias{gg_ph2simon}
 \alias{autoplot.ph2simon}
+\alias{autoplot.ph2simon4}
 \alias{autolayer.ph2simon4}
 \alias{autolayer.ph2simon}
 \title{Plot Simon's Two-Stage Design}
 \usage{
 \method{autoplot}{ph2simon}(object, ...)
+
+\method{autoplot}{ph2simon4}(object, ...)
 
 \method{autolayer}{ph2simon4}(
   object,
