@@ -20,6 +20,7 @@
   n = object@n,
   pu = object@pu,
   pa = object@pa,
+  type = object@type,
   ...
 )
 
@@ -33,6 +34,8 @@
 \item{r1, n1, r, n}{(optional) \link[base]{integer} scalars, see \linkS4class{ph2simon4}.}
 
 \item{pu, pa}{\link[base]{double} scalars, see function \link[clinfun]{ph2simon}}
+
+\item{type}{see slot \verb{@type} of \linkS4class{ph2simon4} object}
 }
 \value{
 Function \code{\link[=autoplot.ph2simon]{autoplot.ph2simon()}} returns a \link[ggplot2]{ggplot} object.

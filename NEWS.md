@@ -1,5 +1,5 @@
-# VisualizeSimon2Stage 0.1.6
-
+# VisualizeSimon2Stage 0.2.1
+Vignette added
 # VisualizeSimon2Stage 0.1.5
 Release for R 4.4.0
 # VisualizeSimon2Stage 0.1.4

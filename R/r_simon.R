@@ -61,7 +61,9 @@ r_simon.ph2simon4 <- function(
   id2 <- (ret > r1) # indices of trials going to stage2
   ret[id2] <- ret[id2] + rbinom(n = sum(id2), size = n - n1, prob = prob) # number of positive responses in stage2
   
-  attr(ret, which = 'dx') <- cut.default(ret, breaks = c(0, r1, r, n), right = TRUE)
+  dx <- cut.default(ret, breaks = c(0, r1, r, n), right = TRUE, include.lowest = TRUE)
+  levels(dx) <- paste(levels(dx), c('Early Termination', 'Fail', 'Success'), sep = '; ')
+  attr(ret, which = 'dx') <- table('Trial Decision' = dx)
   
   return(ret)
   

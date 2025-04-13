@@ -47,6 +47,7 @@ simon_oc.ph2simon4 <- function(
   if (!length(nm <- names(prob)) || any(!nzchar(nm))) stop('`prob` must be named probabilities')
   
   M <- prob |>
+    sort(decreasing = TRUE) |> 
     lapply(FUN = r_simon.ph2simon4, r1 = r1, n1 = n1, r = r, n = n, R = R) |> # [r_simon.ph2simon4] checks if `object` is **one** design
     do.call(what = cbind) 
   # `R x pn` 'matrix' # number of positive responses of each regimen
@@ -82,21 +83,31 @@ simon_oc.ph2simon4 <- function(
 autolayer.simon_oc <- function(object, ...) {
   pn <- length(prob <- object@prob)
   R <- sum(object@maxResp)
-  maxResp <- object@maxResp
-  simon_maxResp <- object@simon_maxResp
-  ymax <- cumsum(maxResp)
-  ymin <- c(0, ymax[-pn])
-  nm <- sprintf(
-    fmt = '%s; p = %.f%%\nHaving Max # of Responses: %.1f%%\nHaving Max # of Responses & Simon\'s Success: %.1f%%\nExpected Sample Size: %.1f', 
-    names(prob), 1e2*prob, 1e2*maxResp/R, 1e2*simon_maxResp/R, object@eN)
+  maxResp <- object@maxResp / R
+  simon_maxResp <- object@simon_maxResp / R
+  max. <- maxResp |> cumsum()
+  min. <- c(0, max.[-pn])
+  nm. <- sprintf(
+    fmt = '%s\np = %.f%%\nE(N)=%.1f', 
+    names(prob), 1e2*prob, object@eN)
   
   list(
-    geom_rect(mapping = aes(ymax = ymax, ymin = ymin, xmax = 1, xmin = 0, fill = nm), alpha = .3, stat = 'identity', colour = 'white'),
-    geom_rect(mapping = aes(ymax = ymin + simon_maxResp, ymin = ymin, xmax = 1, xmin = 0, fill = nm), stat = 'identity', colour = 'white'),
-    coord_polar(theta = 'y'),
-    #coord_radial(theta = 'y'), # dont' understand what this is!!!
-    labs(fill = sprintf('Regimen\n(%d Simulated Trials)', R))
+    geom_textpath(mapping = aes(x = c(0, 0, .5), y = c(1.4, .85, 1.4), label = c(
+      'max{+} & Simon\'s Success',
+      'max{+}',
+      R |> sprintf(fmt = '%d Simulated Trials')
+    )), color = 'grey40'),
+    
+    geom_rect(mapping = aes(xmin = min., xmax = max., ymin = .9, ymax = 1.3, fill = nm.), alpha = .15, color = 'white'),
+    geom_rect(mapping = aes(xmin = min., xmax = min. + simon_maxResp, ymin = .9, ymax = 1.3, fill = nm.), alpha = .5, color = 'white'),
+    
+    geom_textpath(mapping = aes(x = min. + simon_maxResp/2, y = 1.2, label = sprintf(fmt = '%.1f%%', 1e2*simon_maxResp), color = nm.), fontface = 2),
+    geom_textpath(mapping = aes(x = (min. + max.)/2, y = 1.02, label = sprintf(fmt = '%.1f%%', 1e2*maxResp), color = nm.), fontface = 2),
+    
+    ylim(c(0, 1.5))
+  
   )
+  
 }
 
 
@@ -107,7 +118,10 @@ autolayer.simon_oc <- function(object, ...) {
 #' @export
 autoplot.simon_oc <- function(object, ...) {
   ggplot() + autolayer.simon_oc(object, ...) + 
+    coord_polar(theta = 'x') +
     theme_void() +
+    labs(fill = NULL, color = NULL) +
+    theme(legend.position = 'inside') +
     theme(
       legend.key.spacing.y = unit(.02, units = 'npc')
     )
