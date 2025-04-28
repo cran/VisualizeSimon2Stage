@@ -21,7 +21,7 @@
 #' 
 #' @keywords internal
 #' @name gg_ph2simon
-#' @importFrom ggplot2 autoplot ggplot theme theme_void
+#' @importFrom ggplot2 autoplot
 #' @importFrom grid unit
 #' @export autoplot.ph2simon
 #' @export
@@ -32,19 +32,18 @@ autoplot.ph2simon <- function(object, ...) {
 }
 
 #' @rdname gg_ph2simon
+#' @importFrom ggplot2 autoplot ggplot theme_void
 #' @export autoplot.ph2simon4
 #' @export
 autoplot.ph2simon4 <- function(object, ...) {
   ggplot() + autolayer.ph2simon4(object, ...) + 
     coord_polar(theta = 'x') +
-    theme_void() +
-    labs(fill = NULL) +
-    theme(legend.position = 'inside')
+    theme_void()
 }
 
 
 #' @rdname gg_ph2simon
-#' @importFrom ggplot2 autolayer aes geom_rect coord_polar ylim labs
+#' @importFrom ggplot2 autolayer aes geom_rect coord_polar ylim
 #' @importFrom geomtextpath geom_textpath
 #' @importFrom scales pal_hue
 #' @export autolayer.ph2simon4
@@ -68,8 +67,8 @@ autolayer.ph2simon4 <- function(
     
   cdd <- cbind(0, dd) |>
     apply(MARGIN = 1L, FUN = cumsum, simplify = FALSE)
-  xa <- cdd[[1L]]
-  xu <- cdd[[2L]]
+  xu <- cdd[[1L]]
+  xa <- cdd[[2L]]
   
   dd[] <- sprintf(fmt = '%.1f%%', 1e2*dd)
   
@@ -77,8 +76,8 @@ autolayer.ph2simon4 <- function(
   
   list(
     geom_textpath(mapping = aes(x = c(0, 0, .5), y = c(1.4, .6, 1.4), label = c(
-      sprintf(fmt = 'pu=%.0f%%', 1e2*pu),
-      sprintf(fmt = 'pa=%.0f%%', 1e2*pa),
+      sprintf(fmt = 'p\u1d64=%.0f%%', 1e2*pu),
+      sprintf(fmt = 'p\u2090=%.0f%%', 1e2*pa),
       switch(type, minimax = {
         'Minimum Total Sample Size'
       }, optimal = {
@@ -90,19 +89,34 @@ autolayer.ph2simon4 <- function(
       })
     ))),
     
-    geom_rect(mapping = aes(xmin = xa[-4L], xmax = xa[-1L], ymin = 1, ymax = 1.3), fill = hue, alpha = .15, color = 'white'),
-    geom_rect(mapping = aes(xmin = xa[3L], xmax = xa[4L], ymin = 1, ymax = 1.3, fill = 'Success'), alpha = .7, color = 'white'),
-    geom_textpath(mapping = aes(x = (xa[1:2] + xa[2:3])/2, y = 1.2, label = dd[1L, 1:2]), color = hue[1:2], fontface = 2L),
+    # outer circle: p_u
+    geom_rect(mapping = aes(xmin = xu[-4L], xmax = xu[-1L], ymin = 1, ymax = 1.3), fill = hue, alpha = .15, color = 'white'),
+    geom_rect(mapping = aes(xmin = xu[3L], xmax = xu[4L], ymin = 1, ymax = 1.3), fill = hue[3L], alpha = .7, color = 'white'),
+    geom_textpath(
+      mapping = aes(
+        x = (xu[1:2] + xu[2:3])/2, 
+        y = 1.2, 
+        label = paste(c('Early Termination:', 'Fail:'), dd[1L, 1:2])
+      ), color = hue[1:2], fontface = 2L
+    ),
     
-    geom_rect(mapping = aes(xmin = xu[-4L], xmax = xu[-1L], ymin = .65, ymax = .95, fill = nm), alpha = .15, color = 'white'),
-    geom_rect(mapping = aes(xmin = xu[3L], xmax = xu[4L], ymin = .65, ymax = .95, fill = 'Success'), alpha = .7, color = 'white'),
-    geom_textpath(mapping = aes(x = (xu[1:2] + xu[2:3])/2, y = .85, label = dd[2L, 1:2]), color = hue[1:2], fontface = 2L),
+    # inner circle: p_a
+    geom_rect(mapping = aes(xmin = xa[-4L], xmax = xa[-1L], ymin = .65, ymax = .95), fill = hue, alpha = .15, color = 'white'),
+    geom_rect(mapping = aes(xmin = xa[3L], xmax = xa[4L], ymin = .65, ymax = .95), fill = hue[3L], alpha = .7, color = 'white'),
+    geom_textpath(mapping = aes(x = (xa[1:2] + xa[2:3])/2, y = .85, label = dd[2L, 1:2]), color = hue[1:2], fontface = 2L),
     
     #geom_textpath(mapping = aes(x = sum(xa[3:4])/2, y = 1.2, label = dd[1L, 3L]), color = 'white'), # geom_textpath error, must be length-(2+). 
-    geom_textpath(mapping = aes(x = c(sum(xa[3:4])/2, sum(xu[3:4])/2), y = c(1.2, .85), label = dd[,3L]), color = 'white', fontface = 2L),
+    geom_textpath(
+      mapping = aes(
+        x = c(sum(xu[3:4])/2, sum(xa[3:4])/2), 
+        y = c(1.2, .85), 
+        label = c(dd[1L,3L], dd[2L,3L] |> sprintf(fmt = 'Success: %s'))
+      ), 
+      color = 'white', fontface = 2L
+    ),
     
     ylim(c(0, 1.5))
-    #scale_color_manual(values = col_, name = alliance, guide = 'none')
+    
   )
   
 }

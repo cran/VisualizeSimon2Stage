@@ -44,7 +44,7 @@ library(knitr) # for tables in this vignette
 #| echo: false
 #| results: asis
 c(
-  '', 'Forward [pipe operator](https://search.r-project.org/R/refmans/base/html/pipeOp.html) introduced in `R` 4.1.0', 
+  '[|>](https://search.r-project.org/R/refmans/base/html/pipeOp.html)', 'Forward pipe operator introduced in `R` 4.1.0', 
   '`$`', '[Extract](https://search.r-project.org/R/refmans/base/html/Extract.html) parts of an object',
   '[`binom`](https://search.r-project.org/R/refmans/stats/html/Binomial.html)', '[Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) density and distribution', 
   '`CRAN`, `R`', '[The Comprehensive R Archive Network](https://cran.r-project.org)',
@@ -53,11 +53,10 @@ c(
   '`PASS`', 'Power Analysis & Sample Size, <https://www.ncss.com/software/pass/>', 
   '`PET`', 'Probability of early termination',
   '[`ph2simon`](https://search.r-project.org/CRAN/refmans/clinfun/html/ph2simon.html)', 'Simon\'s 2-stage Phase II design',
-  '`S3`, `generic`, `methods`', '`S3` object oriented system, [`UseMethod`](https://search.r-project.org/R/refmans/base/html/UseMethod.html); [`methods`](https://search.r-project.org/R/refmans/utils/html/methods.html); [`getS3method`](https://search.r-project.org/R/refmans/utils/html/getS3method.html); <https://adv-r.hadley.nz/s3.html>',  
+  '`S3`, `generic`, [`methods`](https://search.r-project.org/R/refmans/utils/html/methods.html)', '`S3` object oriented system, [`UseMethod`](https://search.r-project.org/R/refmans/base/html/UseMethod.html); [`getS3method`](https://search.r-project.org/R/refmans/utils/html/getS3method.html); <https://adv-r.hadley.nz/s3.html>',  
   '`S4`, `generic`, `methods`', '`S4` object oriented system, [`isS4`](https://search.r-project.org/R/refmans/base/html/isS4.html); [`setClass`](https://search.r-project.org/R/refmans/methods/html/setClass.html); [`getMethod`](https://search.r-project.org/R/refmans/methods/html/getMethod.html); <https://adv-r.hadley.nz/s4.html>',
   '[`search`](https://search.r-project.org/R/refmans/base/html/search.html)', 'Search path',
-  '[`seed`](https://search.r-project.org/R/refmans/base/html/Random.html)', 'Random number generation seed',
-  '[`table`](https://search.r-project.org/R/refmans/base/html/table.html)', 'Cross tabulation'
+  '[`seed`](https://search.r-project.org/R/refmans/base/html/Random.html)', 'Random number generation seed'
 ) |>
   matrix(nrow = 2L, dimnames = list(c('Term / Abbreviation', 'Description'), NULL)) |>
   t.default() |>
@@ -74,7 +73,7 @@ Simon's two-stage design tests the one-sided hypothesis $H_0: p\leq p_u$ vs. $H_
 1.  Enroll $n_1$ subjects.
 
 -   **Early termination**, or **frail**, if $\leq r_1$ positive responses are observed.
--   Move to next stage if $>r_1$ response are observed.
+-   Move to next stage if $>r_1$ responses are observed.
 
 2.  Enroll an additional $(n-n_1)$ subjects.
 
@@ -119,19 +118,19 @@ Given a Simon's two-stage design $(r_1,n_1,r,n)$ and a true response rate $p$, w
 -   the number of Stage-2 positive responses $X_2 \sim \textrm{binom}(n-n_1, p)$.
 -   $X_1$ and $X_2$ are independent.
 
-The probability of early termination is 
+The probability of early termination is
 
 $$
 p_{\textrm{frail}} = \textrm{Pr}(X_1 \leq r_1)
 $$
 
-The probability of failure to reject $H_0$ is 
+The probability of failure to reject $H_0$ is
 
 $$
 p_{\textrm{fail}} = \sum_{s_1 = r_1+1}^{n_1} \textrm{Pr}(X_1=s_1)\cdot\textrm{Pr}\left(X_2 \leq (r-s_1)\right)
 $$
 
-The probability of successfully rejecting $H_0$ is 
+The probability of successfully rejecting $H_0$ is
 
 $$
 p_{\textrm{success}} = \sum_{s_1 = r_1+1}^{n_1} \textrm{Pr}(X_1=s_1)\cdot\textrm{Pr}(X_2 > (r-s_1))
@@ -182,7 +181,7 @@ or from the design parameters $(r_1, n_1, r, n)$ and `type`. In such case the us
 
 ```{r}
 #| fig-width: 5
-autoplot.ph2simon4(pu = .2, pa = .4, r1 = 5L, n1 = 24L, r = 13L, n = 45L, type = 'optimal')
+autoplot.ph2simon4(pu = .2, pa = .4, r1 = 4L, n1 = 19L, r = 15L, n = 54L, type = 'optimal')
 ```
 
 ## Simulation

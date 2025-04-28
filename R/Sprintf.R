@@ -56,18 +56,18 @@ Sprintf.ph2simon <- function(model, ...) model |> ph2simon4(...) |> Sprintf.ph2s
 #' Function [Sprintf.simon_oc()] returns a \link[base]{character} scalar.
 #' 
 #' @keywords internal
+#' @importFrom scales label_percent
 #' @export
 Sprintf.simon_oc <- function(model, ...) {
   nm <- names(prob <- model@prob)
   N <- sum(model@maxResp)
-  maxResp <- model@maxResp / N
-  simon_maxResp <- model@simon_maxResp / N
   sprintf(
     fmt = 'We simulated %d trials of each of the %d drugs %s with estimated response rates of %s, respectively, using this design. The percentage of trials with each of these drugs having the highest number of responses are %s. The percentage of trials with each of these drugs both having the highest number of responses and being accepted by the Simon\'s two-stage design are %s.', 
     N, length(prob),
-    paste(sQuote(nm), collapse = ', '),
-    paste(sprintf(fmt = '%.0f%%', 1e2*prob), collapse = ', '),
-    paste(sprintf(fmt = '%.1f%%', 1e2*maxResp), 'for', nm, collapse = ', '),
-    paste(sprintf(fmt = '%.1f%%', 1e2*simon_maxResp), 'for', nm, collapse = ', '))
+    paste0('`', nm, '`', collapse = ', '),
+    prob |> label_percent()() |> paste(collapse = ', '),
+    (model@maxResp / N) |> label_percent(accuracy = .1, suffix = sprintf('%% for %s', nm))() |> paste(collapse = ', '),
+    (model@simon_maxResp / N) |> label_percent(accuracy = .1, suffix = sprintf('%% for %s', nm))() |> paste(collapse = ', ')
+  )
 }
 

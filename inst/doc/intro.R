@@ -16,7 +16,7 @@ library(knitr) # for tables in this vignette
 #| echo: false
 #| results: asis
 c(
-  '', 'Forward [pipe operator](https://search.r-project.org/R/refmans/base/html/pipeOp.html) introduced in `R` 4.1.0', 
+  '[|>](https://search.r-project.org/R/refmans/base/html/pipeOp.html)', 'Forward pipe operator introduced in `R` 4.1.0', 
   '`$`', '[Extract](https://search.r-project.org/R/refmans/base/html/Extract.html) parts of an object',
   '[`binom`](https://search.r-project.org/R/refmans/stats/html/Binomial.html)', '[Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) density and distribution', 
   '`CRAN`, `R`', '[The Comprehensive R Archive Network](https://cran.r-project.org)',
@@ -25,11 +25,10 @@ c(
   '`PASS`', 'Power Analysis & Sample Size, <https://www.ncss.com/software/pass/>', 
   '`PET`', 'Probability of early termination',
   '[`ph2simon`](https://search.r-project.org/CRAN/refmans/clinfun/html/ph2simon.html)', 'Simon\'s 2-stage Phase II design',
-  '`S3`, `generic`, `methods`', '`S3` object oriented system, [`UseMethod`](https://search.r-project.org/R/refmans/base/html/UseMethod.html); [`methods`](https://search.r-project.org/R/refmans/utils/html/methods.html); [`getS3method`](https://search.r-project.org/R/refmans/utils/html/getS3method.html); <https://adv-r.hadley.nz/s3.html>',  
+  '`S3`, `generic`, [`methods`](https://search.r-project.org/R/refmans/utils/html/methods.html)', '`S3` object oriented system, [`UseMethod`](https://search.r-project.org/R/refmans/base/html/UseMethod.html); [`getS3method`](https://search.r-project.org/R/refmans/utils/html/getS3method.html); <https://adv-r.hadley.nz/s3.html>',  
   '`S4`, `generic`, `methods`', '`S4` object oriented system, [`isS4`](https://search.r-project.org/R/refmans/base/html/isS4.html); [`setClass`](https://search.r-project.org/R/refmans/methods/html/setClass.html); [`getMethod`](https://search.r-project.org/R/refmans/methods/html/getMethod.html); <https://adv-r.hadley.nz/s4.html>',
   '[`search`](https://search.r-project.org/R/refmans/base/html/search.html)', 'Search path',
-  '[`seed`](https://search.r-project.org/R/refmans/base/html/Random.html)', 'Random number generation seed',
-  '[`table`](https://search.r-project.org/R/refmans/base/html/table.html)', 'Cross tabulation'
+  '[`seed`](https://search.r-project.org/R/refmans/base/html/Random.html)', 'Random number generation seed'
 ) |>
   matrix(nrow = 2L, dimnames = list(c('Term / Abbreviation', 'Description'), NULL)) |>
   t.default() |>
@@ -70,7 +69,7 @@ x |> ph2simon4(type = 'optimal') |> autoplot()
 
 ## -----------------------------------------------------------------------------
 #| fig-width: 5
-autoplot.ph2simon4(pu = .2, pa = .4, r1 = 5L, n1 = 24L, r = 13L, n = 45L, type = 'optimal')
+autoplot.ph2simon4(pu = .2, pa = .4, r1 = 4L, n1 = 19L, r = 15L, n = 54L, type = 'optimal')
 
 
 ## -----------------------------------------------------------------------------

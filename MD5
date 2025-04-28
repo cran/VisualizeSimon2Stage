@@ -1,10 +1,10 @@
-0626084d7a3368adc9e49ba57aea0348 *DESCRIPTION
-a3fc0ec96d9509b869acc50d581753d0 *NAMESPACE
+d91421daa4d238fb34609ef5129009ee *DESCRIPTION
+30d5747e7fb502cce73ddf1b95c51779 *NAMESPACE
 e2236be7b051b84eeb9b878846e484f1 *NEWS.md
 e06f91de8242aa2739334345d91cbaf1 *R/0PACKAGE.R
 fa509d1f7bbb211b801c78bb41e852d6 *R/0S4.R
-7d60ff5cbfdd065420c342ab6eed583a *R/Sprintf.R
-b78c7f51c381aa878df1a0b77f4433b0 *R/autoplot.R
+1ce750ea5a8304c06c558552714c9cb9 *R/Sprintf.R
+9ae531184f8f9ffd481608385a5db02c *R/autoplot.R
 8d09ad2ec1a1ebb2da52e90b7df77cab *R/ph2simon4.R
 328f45f7560017ad765bf6bbcd4b0ed6 *R/r_simon.R
 8dc3d0efaea7c1386b8831eabfbfc703 *R/show.R
@@ -14,9 +14,9 @@ eaba6f4ec5cb72b1d61f15589359764b *R/summary.R
 4f584ff3e6583de8a4ed35f4578cd9ba *README.md
 0e63f61f90256c800fe7918de3bd4732 *build/vignette.rds
 f0ebb98c9a4365027d2f6fbc4bb4d8f4 *inst/WORDLIST
-ac62870e252cd42d0e659404b31e94f2 *inst/doc/intro.R
-7559dbe245bf630e30e02782b3d3b549 *inst/doc/intro.html
-3120beb2dea982e90e4a526c9faeb56c *inst/doc/intro.qmd
+470dfdfa2131136736f6535b269eabc0 *inst/doc/intro.R
+d092ad8a3200c6438d43249306bae172 *inst/doc/intro.html
+01ebb7d0d8bd446b9642f42b0d2659a5 *inst/doc/intro.qmd
 d35a38ca58ac6be73387886320369276 *man/Sprintf.simon_oc.Rd
 2d6575dc0146ab26938393536bba047b *man/Sprintf_ph2simon.Rd
 f9b06d6c7db6f02cb3bec587f72c9599 *man/VisualizeSimon2Stage-package.Rd
@@ -28,4 +28,4 @@ e34aafbdd2a62b92d5a65635a0564d72 *man/show_simon.Rd
 a367c0ffaea568ed4753942cec99f16d *man/simon_oc.Rd
 b9e3ae480048350ddbce216b3139a03f *man/simon_pr.Rd
 20f2b8876479b88063253fdfcd3e3bdc *man/summary_ph2simon.Rd
-3120beb2dea982e90e4a526c9faeb56c *vignettes/intro.qmd
+01ebb7d0d8bd446b9642f42b0d2659a5 *vignettes/intro.qmd
