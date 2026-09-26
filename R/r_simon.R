@@ -63,7 +63,7 @@ r_simon.ph2simon4 <- function(
   
   dx <- cut.default(ret, breaks = c(0, r1, r, n), right = TRUE, include.lowest = TRUE)
   levels(dx) <- paste(levels(dx), c('Early Termination', 'Fail', 'Success'), sep = '; ')
-  attr(ret, which = 'dx') <- table('Trial Decision' = dx)
+  attr(ret, which = 'dx') <- dx
   
   return(ret)
   

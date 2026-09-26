@@ -18,6 +18,7 @@ S3method(simon_pr,ph2simon)
 S3method(simon_pr,ph2simon4)
 S3method(summary,ph2simon)
 S3method(summary,ph2simon4)
+export(.simon89)
 export(Sprintf.ph2simon)
 export(Sprintf.ph2simon4)
 export(Sprintf.simon_oc)
@@ -27,6 +28,10 @@ export(autolayer.ph2simon4)
 export(autoplot.ph2simon)
 export(autoplot.ph2simon4)
 export(ph2simon4)
+export(power.ph2simon)
+export(power.ph2simon4)
+export(powerCurve.ph2simon)
+export(powerCurve.ph2simon4)
 export(r_simon)
 export(r_simon.ph2simon)
 export(r_simon.ph2simon4)
@@ -43,27 +48,44 @@ exportClasses(simon_oc)
 exportClasses(simon_pr)
 exportMethods(show)
 import(methods)
-importFrom(flextable,add_header_row)
-importFrom(flextable,align)
-importFrom(flextable,as_flextable)
-importFrom(flextable,autofit)
-importFrom(flextable,flextable)
-importFrom(flextable,vline)
+importFrom(flextable,
+  add_header_row,
+  align,
+  as_flextable,
+  autofit,
+  flextable,
+  vline
+)
 importFrom(geomtextpath,geom_textpath)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,autolayer)
-importFrom(ggplot2,autoplot)
-importFrom(ggplot2,coord_polar)
-importFrom(ggplot2,geom_rect)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,theme_void)
-importFrom(ggplot2,ylim)
+importFrom(ggplot2,
+  aes,
+  autolayer,
+  autoplot,
+  coord_polar,
+  geom_point,
+  geom_rect,
+  ggplot,
+  labs,
+  scale_x_continuous,
+  scale_y_continuous,
+  stat_function,
+  theme,
+  theme_void,
+  ylim
+)
+importFrom(ggrepel,geom_label_repel)
 importFrom(grid,unit)
 importFrom(officer,fp_border)
-importFrom(scales,label_percent)
-importFrom(scales,pal_hue)
-importFrom(stats,dbinom)
-importFrom(stats,pbinom)
-importFrom(stats,rbinom)
+importFrom(scales,
+  label_percent,
+  pal_hue
+)
+importFrom(stats,
+  dbinom,
+  pbinom,
+  rbinom
+)
+importFrom(utils,
+  bibentry,
+  person
+)

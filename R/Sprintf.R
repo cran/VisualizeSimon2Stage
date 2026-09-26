@@ -21,15 +21,20 @@ Sprintf.ph2simon4 <- function(model, ...) {
   r <- model@r
   n <- model@n
   
-  msum <- summary.ph2simon4(model, ...)
+  z <- model |> 
+    summary.ph2simon4(...)
+  
+  # wording copied from
+  # https://cancer.unc.edu/biostatistics/program/ivanova/SimonsTwoStageDesign.aspx
   
   sprintf(
-    fmt = 'Simon\'s %s two-stage design for testing the null hypothesis p\u207A\u2264%.f%% versus the alternative hypothesis p\u207A>%.f%% with type-I-error rate %.1f%%, as described below, will achieve %.1f%% power at true p\u207A=%.0f%%. The drug will be tested on %d patients in the first stage. The trial will be terminate early if %d or fewer patients respond (early termination probability %.1f%% under the null p\u207A=%.f%%). Otherwise another %d patients will be enrolled in the second stage and the drug will be rejected if the total number of patients responding is %d or fewer. This design requires a maximum sample size of %d patients, with an expected sample size of %.1f patients under the null p\u207A=%.f%%. This design is provided by <u>**`R`**</u> package <u>**`clinfun`**</u>.',
+    fmt = 'Simon\'s %s two-stage design for testing the null hypothesis p\u207A\u2264%.f%% with type-I-error rate %.1f%%, as described below, achieves %.1f%% power at true p\u207A=%.0f%%. In the first stage, %d patients will be accrued. The trial will be terminated if %d or fewer patients respond. Otherwise, another %d patients will be accrued for a total of %d patients, and the `drug` will be rejected if the total number of responses is %d or fewer. This design is provided by <u>**`R`**</u> package <u>**`clinfun`**</u>.',
     model@type,  
-    1e2*model@pu, 1e2*model@pu, 1e2*model@alpha, 1e2*(1-model@beta), 1e2*model@pa,
-    n1, r1, 1e2*msum$p[,'PET(pu)'], 1e2*model@pu, 
-    n - n1, r,
-    n, msum$EN[,'EN(pa)'], 1e2*model@pu)
+    1e2*model@pu,
+    1e2*model@alpha, 
+    1e2*(1-z$p[,4L]), 1e2*model@pa,
+    n1, r1,
+    n - n1, n, r)
 }
 
 

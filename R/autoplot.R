@@ -22,7 +22,6 @@
 #' @keywords internal
 #' @name gg_ph2simon
 #' @importFrom ggplot2 autoplot
-#' @importFrom grid unit
 #' @export autoplot.ph2simon
 #' @export
 autoplot.ph2simon <- function(object, ...) {

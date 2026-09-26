@@ -8,13 +8,19 @@
 \description{
 To visualize the probabilities of early termination, fail and success of Simon's two-stage design. To evaluate and visualize the operating characteristics of Simon's two-stage design.
 }
-\note{
-Help files of individual functions are intentionally suppressed in the \code{pdf} manual.
-Users are encouraged to get started with
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/tingtingzhan/VisualizeSimon2Stage}
+}
 
-\code{vignette('intro', package = 'VisualizeSimon2Stage')}
 }
 \author{
-\strong{Maintainer}: Tingting Zhan \email{tingtingzhan@gmail.com} (\href{https://orcid.org/0000-0001-9971-4844}{ORCID})
+\strong{Maintainer}: Tingting Zhan \email{tingtingzhan@gmail.com}
+
+Authors:
+\itemize{
+  \item Tingting Zhan \email{tingtingzhan@gmail.com}
+}
 
 }

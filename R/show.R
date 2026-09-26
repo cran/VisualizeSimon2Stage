@@ -17,7 +17,6 @@
 #' @aliases show,simon_oc-method
 #' @export
 setMethod(f = show, signature = 'simon_oc', definition = function(object) {
-  # object |> Sprintf.simon_oc() |> cat() # no longer print
   object |> autoplot.simon_oc() |> print()
 })
 
@@ -44,7 +43,7 @@ setMethod(f = show, signature = 'ph2simon4', definition = function(object) {
   out$EN[] <- sprintf(fmt = '%.1f', out$EN)
   out$p[] <- sprintf(fmt = '%.1f%%', 1e2*out$p) 
   
-  cat('\n Simon\'s 2-Stage Design\n\n')
+  cat('\n Simon\'s 2-Stage Phase II Design\n\n')
   sprintf(fmt = 'Unacceptable Response Rate: %.1f%%\n', 1e2*object@pu) |> cat()
   sprintf(fmt = 'Desirable Response Rate: %.1f%%\n', 1e2*object@pa) |> cat()
   sprintf(fmt = 'Controlled Error Rates: \u03b1 \u2264 %.f%%, \u03b2 \u2264 %.f%%\n', 1e2*object@alpha, 1e2*object@beta) |> cat()
